@@ -112,7 +112,7 @@ export default function AnalysisPage() {
                 close: 180 + (Math.random() * 20 - 10)
             })).reverse();
 
-            const response = await axios.post('http://127.0.0.1:8000/analysis/analyse/', {
+            const response = await axios.post('https://f8n-23401246568.europe-west1.run.app/analysis/analyse/', {
                 ticker: symbol
             });
 

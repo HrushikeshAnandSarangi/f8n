@@ -26,7 +26,7 @@ export default function StockNewsSection() {
   useEffect(() => {
     const fetchStockData = async () => {
       try {
-        const response = await fetch(' http://127.0.0.1:8000/news/news/')
+        const response = await fetch(' https://f8n-23401246568.europe-west1.run.app/news/news/')
         
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`)

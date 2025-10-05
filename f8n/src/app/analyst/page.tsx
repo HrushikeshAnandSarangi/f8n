@@ -61,7 +61,7 @@ export default function SentimentAnalysisPage() {
 
     try {
       // Real API call to your FastAPI backend
-      const response = await axios.post('http://127.0.0.1:8000/sentiment/sentiment/', {
+      const response = await axios.post('https://f8n-23401246568.europe-west1.run.app/sentiment/sentiment/', {
         ticker: ticker
       });
 

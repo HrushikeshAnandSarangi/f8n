@@ -27,7 +27,7 @@ const StockRecommender: React.FC = () => {
 
     try {
       const response = await fetch(
-          `http://127.0.0.1:8000/recommendations/recommendations/?top_n=3&alpha=0.7`,
+          `https://f8n-23401246568.europe-west1.run.app/recommendations/recommendations/?top_n=3&alpha=0.7`,
           {
             method: "POST",
             headers: {

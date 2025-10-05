@@ -100,7 +100,7 @@ export default function ComparisonPage() {
 
         try {
             // NOTE: Replace with your actual API endpoint
-            const response = await axios.post('http://127.0.0.1:8000/compare/compare/', {
+            const response = await axios.post('https://f8n-23401246568.europe-west1.run.app/compare/compare/', {
                 stock1: comparisonStock1,
                 stock2: comparisonStock2
             });
