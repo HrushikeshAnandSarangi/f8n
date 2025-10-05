@@ -104,36 +104,44 @@ export default function StockNewsSection() {
 
       {/* Stock News List */}
       <div className="divide-y divide-gray-100 dark:divide-gray-700">
-        {stockData && stockData.tickers.map(ticker => (
-          <div key={ticker} className="p-6 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors group">
-            <div className="flex flex-col">
-              <div className="flex items-center gap-2 mb-2">
-                <span className="px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-900/20 dark:text-blue-400">
-                  {ticker}
-                </span>
-                <span className="text-sm text-gray-500 dark:text-gray-400 flex items-center">
-                  <Clock className="w-3 h-3 mr-1" /> Today
-                </span>
+        {stockData && stockData.tickers.map(ticker => {
+          const newsItem = stockData.data[ticker];
+          // If newsItem for a ticker doesn't exist, skip rendering to prevent a crash.
+          if (!newsItem) {
+            return null;
+          }
+
+          return (
+            <div key={ticker} className="p-6 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors group">
+              <div className="flex flex-col">
+                <div className="flex items-center gap-2 mb-2">
+                  <span className="px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-900/20 dark:text-blue-400">
+                    {ticker}
+                  </span>
+                  <span className="text-sm text-gray-500 dark:text-gray-400 flex items-center">
+                    <Clock className="w-3 h-3 mr-1" /> Today
+                  </span>
+                </div>
+                <h3 className="text-lg font-semibold mb-2 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+                  {newsItem.title}
+                </h3>
+                <p className="text-sm text-gray-600 dark:text-gray-400 line-clamp-3">
+                  {newsItem.summary}
+                </p>
               </div>
-              <h3 className="text-lg font-semibold mb-2 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
-                {stockData.data[ticker].title}
-              </h3>
-              <p className="text-sm text-gray-600 dark:text-gray-400 line-clamp-3">
-                {stockData.data[ticker].summary}
-              </p>
+              
+              {/* Action Buttons */}
+              <div className="flex justify-end gap-3 mt-4">
+                <button className="text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors p-1 rounded-full hover:bg-gray-100 dark:hover:bg-gray-600">
+                  <Bookmark className="w-5 h-5" />
+                </button>
+                <button className="text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors p-1 rounded-full hover:bg-gray-100 dark:hover:bg-gray-600">
+                  <Share2 className="w-5 h-5" />
+                </button>
+              </div>
             </div>
-            
-            {/* Action Buttons */}
-            <div className="flex justify-end gap-3 mt-4">
-              <button className="text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors p-1 rounded-full hover:bg-gray-100 dark:hover:bg-gray-600">
-                <Bookmark className="w-5 h-5" />
-              </button>
-              <button className="text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors p-1 rounded-full hover:bg-gray-100 dark:hover:bg-gray-600">
-                <Share2 className="w-5 h-5" />
-              </button>
-            </div>
-          </div>
-        ))}
+          )
+        })}
       </div>
 
       {/* Footer */}
