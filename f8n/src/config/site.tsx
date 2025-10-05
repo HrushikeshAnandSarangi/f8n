@@ -32,47 +32,37 @@ export const navigations: Navigation[] = [
   },
   {
     icon: PieChart,
-    name: "Mutual Funds",
+    name: "Mutual Funds Agent",
     href: "/mutualFund",
   },
   {
     icon: LineChart,
-    name: "Stock Analysis",
+    name: "Analysis Agent",
     href: "/stock-analysis",
   },
   {
     icon: ArrowRightLeft,
-    name: "Stock Comparison",
+    name: "Comparison Agent",
     href: "/compare",
   },
   {
-    icon: TrendingUp,
-    name: "Ongoing Trend",
-    href: "/realtime-trend",
-  },
-  {
     icon: Eye,
-    name: "My Watchlist",
+    name: "Watchlist Agent",
     href: "/watchlist",
   },
   {
-    icon: Briefcase,
-    name: "Holdings",
-    href: "/holdings",
-  },
-  {
     icon: BarChart3,
-    name: "Analysis",
+    name: "Sentiment Agent",
     href: "/analyst",
   },
   {
     icon: MessagesSquare,
-    name: "Recommendations",
+    name: "Recommendations Agent",
     href: "/recommendations",
   },
   {
     icon: Newspaper,
-    name: "News Hub",
+    name: "News Agent",
     href: "/news",
   }
 ];

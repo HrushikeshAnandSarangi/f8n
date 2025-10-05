@@ -167,37 +167,12 @@ export default function AnalysisPage() {
 
     return (
         <div className="flex min-h-screen flex-col bg-gray-50 dark:bg-gray-900">
-            <header className="sticky top-0 z-40 border-b bg-white dark:bg-gray-900">
-                <div className="container flex h-16 items-center justify-between px-4 sm:px-6">
-                    <div className="flex items-center gap-6">
-                        <Link href="#" className="flex items-center gap-2 font-semibold">
-                            <BarChart3 className="h-6 w-6" />
-                            <span>Stock Analysis</span>
-                        </Link>
-                    </div>
-                    <div className="flex items-center gap-4">
-                        <button className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 border border-input bg-background shadow-sm hover:bg-accent hover:text-accent-foreground h-9 px-4 py-2">
-                            Sign In
-                        </button>
-                        <button
-                            className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 bg-blue-600 text-white shadow hover:bg-blue-600/90 h-9 px-4 py-2"
-                        >
-                            Sign Up
-                        </button>
-                        <button
-                            className="inline-flex items-center justify-center rounded-md text-gray-500 hover:text-gray-900 dark:hover:text-gray-50 lg:hidden"
-                            onClick={() => setIsMenuOpen(!isMenuOpen)}
-                        >
-                            <Menu className="h-6 w-6" />
-                        </button>
-                    </div>
-                </div>
-            </header>
+
 
             <main className="flex-1">
                 <div className="container mx-auto py-6 px-4 sm:px-6">
                     <div className="mb-6">
-                        <h1 className="text-3xl font-bold text-gray-900 dark:text-white">📈 Stock Analysis</h1>
+                        <h1 className="text-3xl font-bold text-gray-900 dark:text-white"> Stock Analysis</h1>
                         <p className="text-gray-500 dark:text-gray-400">In-depth technical analysis for any stock</p>
 
                         {/* Stock Data Display with Analysis */}
@@ -323,7 +298,7 @@ export default function AnalysisPage() {
                         {/* Price Trend Chart */}
                         <div className="mt-6 rounded-lg border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-700 dark:bg-gray-800">
                             <h3 className="mb-4 text-lg font-semibold text-gray-900 dark:text-white">
-                                🕒 Live Price Movement (Last 5 Hours)
+                                 Live Price Movement (Last 5 Hours)
                             </h3>
                             <div className="h-64">
                                 <ResponsiveContainer width="100%" height="100%">
@@ -349,7 +324,7 @@ export default function AnalysisPage() {
                         <div className="rounded-lg border border-gray-200 bg-white shadow-sm dark:border-gray-700 dark:bg-gray-800 w-full max-w-md">
                             <div className="flex items-center justify-between border-b border-gray-200 px-6 py-4 dark:border-gray-700">
                                 <div>
-                                    <h2 className="text-lg font-semibold text-gray-900 dark:text-white">🔥 Hot Stocks</h2>
+                                    <h2 className="text-lg font-semibold text-gray-900 dark:text-white"> Hot Stocks</h2>
                                     <p className="text-sm text-gray-500 dark:text-gray-400">Most traded today</p>
                                 </div>
                                 <button className="inline-flex items-center rounded-md border border-gray-300 bg-white px-31 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300">
@@ -414,7 +389,7 @@ export default function AnalysisPage() {
                         <div className="rounded-lg border border-gray-200 bg-white shadow-sm dark:border-gray-700 dark:bg-gray-800 lg:col-span-1">
                             <div className="border-b border-gray-200 px-6 py-4 dark:border-gray-700">
                                 <div className="flex items-center justify-between">
-                                    <h2 className="text-lg font-semibold text-gray-900 dark:text-white">🏆 Top Movers</h2>
+                                    <h2 className="text-lg font-semibold text-gray-900 dark:text-white"> Top Movers</h2>
                                     <div className="inline-flex rounded-md shadow-sm">
                                         <button
                                             onClick={() => setActiveTab("gainers")}
@@ -482,7 +457,7 @@ export default function AnalysisPage() {
                         <div className="rounded-lg border border-gray-200 bg-white shadow-sm dark:border-gray-700 dark:bg-gray-800 lg:col-span-1">
                             <div className="flex items-center justify-between border-b border-gray-200 px-6 py-4 dark:border-gray-700">
                                 <div>
-                                    <h2 className="text-lg font-semibold text-gray-900 dark:text-white">🚀 Leveraged ETFs</h2>
+                                    <h2 className="text-lg font-semibold text-gray-900 dark:text-white"> Leveraged ETFs</h2>
                                     <p className="text-sm text-gray-500 dark:text-gray-400">High-volume margin trading</p>
                                 </div>
                                 <button className="inline-flex items-center rounded-md border border-gray-300 bg-white px-3 py-1 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300">
@@ -516,7 +491,7 @@ export default function AnalysisPage() {
                         <div className="rounded-lg border border-gray-200 bg-white shadow-sm dark:border-gray-700 dark:bg-gray-800 lg:col-span-1">
                             <div className="flex items-center justify-between border-b border-gray-200 px-6 py-4 dark:border-gray-700">
                                 <div>
-                                    <h2 className="text-lg font-semibold text-gray-900 dark:text-white">💼 Long-Term ETFs</h2>
+                                    <h2 className="text-lg font-semibold text-gray-900 dark:text-white"> Long-Term ETFs</h2>
                                     <p className="text-sm text-gray-500 dark:text-gray-400">Popular SIP investments</p>
                                 </div>
                                 <button className="inline-flex items-center rounded-md border border-gray-300 bg-white px-3 py-1 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300">
@@ -550,7 +525,7 @@ export default function AnalysisPage() {
                         <div className="rounded-lg border border-gray-200 bg-white shadow-sm dark:border-gray-700 dark:bg-gray-800 lg:col-span-1">
                             <div className="flex items-center justify-between border-b border-gray-200 px-6 py-4 dark:border-gray-700">
                                 <div>
-                                    <h2 className="text-lg font-semibold text-gray-900 dark:text-white">🏭 Sector Distribution</h2>
+                                    <h2 className="text-lg font-semibold text-gray-900 dark:text-white"> Sector Distribution</h2>
                                     <p className="text-sm text-gray-500 dark:text-gray-400">Market sector allocation</p>
                                 </div>
                             </div>
@@ -579,22 +554,6 @@ export default function AnalysisPage() {
                     </div>
                 </div>
             </main>
-
-            <footer className="border-t border-gray-200 py-6 dark:border-gray-700">
-                <div className="container px-4 sm:px-6">
-                    <div className="flex flex-col items-center justify-between gap-4 md:flex-row">
-                        <div className="flex items-center gap-4">
-                            <Link href="#" className="flex items-center gap-2 font-semibold">
-                                <BarChart3 className="h-6 w-6" />
-                                <span>Stock Analysis</span>
-                            </Link>
-                            <p className="text-sm text-gray-500 dark:text-gray-400">
-                                © {new Date().getFullYear()} Stock Analysis. All rights reserved.
-                            </p>
-                        </div>
-                    </div>
-                </div>
-            </footer>
         </div>
     );
 }
