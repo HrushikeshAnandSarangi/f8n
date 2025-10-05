@@ -99,6 +99,19 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to view th
 
 ---
 
+## 📊 Dashboard Overview
+
+| Section          | Description                          |
+|------------------|--------------------------------------|
+| **Portfolio Value** | Current total value and 24h change. |
+| **Gains/Losses** | Overall P&L with pie chart breakdown. |
+| **Asset Allocation** | Bar chart showing stocks, bonds, etc. |
+| **Top Holdings** | Table of your largest positions.    |
+| **Recent Transactions** | List of buys/sells with timestamps. |
+
+---
+
+
 ## 🤝 Contributing
 
 We welcome contributions to enhance the f8n platform. Please follow the standard workflow:
