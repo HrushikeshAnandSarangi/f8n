@@ -20,7 +20,7 @@ export type Navigation = {
 };
 
 export const siteConfig = {
-  title: "Metafin",
+  title: "f8n",
   description: "Your Personal Finance Assistant",
 };
 

@@ -24,7 +24,7 @@ const TradingViewWidget: React.FC = () => {
         "symbol": "${category}:${symbol}",
         "interval": "D",
         "timezone": "Etc/UTC",
-        "theme": "dark",
+        "theme": "light",
         "style": "0",
         "locale": "en",
         "allow_symbol_change": true,

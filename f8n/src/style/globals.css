@@ -3,6 +3,59 @@
 @tailwind utilities;
 @import "./dot-matrix.css";
 
+
+/* ==== Force Light Mode ==== */
+
+/* Always set light background and dark text */
+:root,
+html,
+body {
+  color-scheme: light;
+  background-color: #ffffff !important;
+  color: #000000 !important;
+}
+
+/* Disable any dark-mode specific styles */
+[class*="dark"] *,
+[data-theme="dark"] *,
+html.dark *,
+body.dark * {
+  background-color: inherit !important;
+  color: inherit !important;
+  filter: none !important;
+}
+
+/* ==== Convert All Blue Shades to Bright Pink ==== */
+
+/* Replace any blue-like colors with bright pink */
+* {
+  /* for inline-colored elements */
+  color: var(--pinkify, #ff2fc3) !important;
+  border-color: var(--pinkify, #ff2fc3) !important;
+}
+
+a,
+button,
+svg,
+[class*="blue"],
+.text-blue-500,
+.bg-blue-500,
+.border-blue-500 {
+  color: #ff2fc3 !important;
+  background-color: #ff2fc3 !important;
+  border-color: #ff2fc3 !important;
+}
+
+/* If gradients or transitions include blue tones, shift them to pink */
+[class*="from-blue"],
+[class*="via-blue"],
+[class*="to-blue"] {
+  --tw-gradient-from: #ff2fc3 !important;
+  --tw-gradient-to: #ff2fc3 !important;
+  --tw-gradient-stops: #ff2fc3 !important;
+}
+
+
 @layer base {
   :root {
     --background: 0 0% 100%;
@@ -32,32 +85,6 @@
     --chart-5: 27 87% 67%;
   }
 
-  .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
-    --primary: 225 100% 50%;
-    --primary-foreground: 222.2 47.4% 11.2%;
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 217.2 32.6% 13.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 212.7 26.8% 83.9%;
-    --chart-1: 220 70% 50%;
-    --chart-2: 160 60% 45%;
-    --chart-3: 30 80% 55%;
-    --chart-4: 280 65% 60%;
-    --chart-5: 340 75% 55%;
-  }
 }
 
 @layer base {
