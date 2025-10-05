@@ -1,119 +1,116 @@
-# 🚀 ACTA Global Hackathon
+# f8n: AI-Powered Investment Analytics & Portfolio Agent Suite 📈🤖
 
-**24 hours to build something impressive.**
+<p align="center">
+  <img src="https://f8n.vercel.app/f8n.svg" alt="f8n Logo" width="100"/>
+</p>
 
-## ⏰ Timeline
-
-- **Start**: Oct 4, 2025 at 12:00 CET
-- **End**: Oct 5, 2025 at 12:00 CET
-- **Duration**: 24 hours
-
-## 🏆 Prizes
-
-1. **1st**: One week in Cape Town (flights + hotel)
-2. **2nd**: €300 + fast-tracked interview
-3. **3rd**: Raspberry Pi + fast-tracked interview
-
-## 💡 What to Build
-
-**Option 1: Build anything you wish existed** (open format - truly anything!)
-
-**Option 2: Choose one of these problem statements:**
-
-### 1. Memory Keeper for Grandparents
-Interactive AI conversations that capture grandparents' life memories and turn them into blog posts for family members. Think Duolingo but for preserving family stories and wisdom.
-
-### 2. Graph-Based Learning System
-Transform linear course content (like [MIT's Statistics course](https://ocw.mit.edu/courses/18-05-introduction-to-probability-and-statistics-spring-2022/)) into an interactive graph-based learning experience. Organize concepts as nodes/connections to match how the brain actually learns - accelerating comprehension through visualization and non-linear exploration.
-
-### 3. Agent Orchestration Layer
-Build the n8n for AI agents - an orchestration platform for vertical agents to create AI-native companies. Solve context engineering and enable swarm intelligence across agent networks.
-
-**Note**: These are extensive problems - MVPs are perfectly fine and expected!
-
-## 🎯 Rules
-
-- Solo or duo teams
-- Greenfield projects only
-- Any tech stack
-- Must be buildable in 24 hours
-- Read [RULES.md](./RULES.md) for anti-cheating requirements
-
-## 🚀 Quick Start
-
-```bash
-# 1. Clone this repo
-git clone <your-fork-url>
-cd global-hackathon-v1
-
-# 2. Create timestamp (REQUIRED for anti-cheating)
-date > .hackathon-start
-git add .hackathon-start
-git commit -m "Starting hackathon - $(date)"
-git push
-
-# 3. Build your project here
-# 4. Commit regularly (minimum 5 commits)
-```
-
-## 📤 Submission
-
-**Deadline**: Oct 5, 2025 at 12:00 CET
-
-**Submit at**: [https://forms.acta.so/r/wMobdM](https://forms.acta.so/r/wMobdM)
-
-**You need**:
-1. Public GitHub repo URL
-2. 60-second demo video (Loom/YouTube - must be public)
-3. Live demo URL (deployed app)
-4. Your email and name
-
-## ✅ Before Submitting
-
-```bash
-# Run verification
-node verify-submission.js
-```
-
-Check:
-- [ ] GitHub repo is public
-- [ ] 60s video is public and accessible
-- [ ] Live demo works in incognito window
-- [ ] Made 5+ commits during the 24 hours
-- [ ] README updated with project info
-
-## 🎬 Judging
-
-**Top 25 submissions** will be ranked 1-10 on each criterion:
-
-### Craft (1-10)
-Quality of execution, code quality, attention to detail, polish. Does it work smoothly? Is it well-built? A simple feature done exceptionally well scores higher than complex features done poorly.
-
-### Novelty (1-10)
-Originality and innovation. Is this a fresh take? Does it approach the problem differently? Bonus points for ideas that make judges think "why doesn't this exist yet?"
-
-### Utility (1-10)
-Practical usefulness and real-world value. Would people actually use this? Does it solve a genuine problem? Could this become a real product?
-
-### Taste (1-10)
-Design sensibility, user experience, aesthetic choices. Is it intuitive? Does it feel good to use? Great taste shows in the details - from UI design to interaction patterns to copy writing.
-
-**Final scores** are calculated by summing all four dimensions. Highest total wins.
-
-## 💡 Tips
-
-- Start simple, iterate
-- Commit often (proves authenticity)
-- Deploy early (Vercel, Netlify, Railway)
-- Record demo showing actual functionality
-- Read [RULES.md](./RULES.md) to avoid disqualification
-
-## 📞 Support
-
-- **Discord**: [Join](https://discord.gg/9KbH3f5M2a)
-- **Instagram**: [@acta.so](https://instagram.com/acta.so)
-- **Web**: [acta.so/hackathon](https://www.acta.so/hackathon)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Deployed with Vercel](https://vercel.com/button)](https://f8n.vercel.app/)
+[![Built with Next.js](https://img.shields.io/badge/Built%20with-Next.js-black?style=flat&logo=next.js)](https://nextjs.org/)
+[![API Integration](https://img.shields.io/badge/Data%20Source-Upstox%20API-blue)](https://upstox.com/developer/api-documentation/)
 
 ---
 
-**Good luck! 🎉**
+## ⭐️ Overview
+
+**f8n** is a sophisticated, agent-driven platform providing **AI-enhanced investment analytics** and a comprehensive **Portfolio Dashboard**. It is designed for modern investors who require deep insights, real-time tracking, and specialized analysis across their holdings.
+
+A key feature is its seamless integration with brokerage APIs, particularly **Upstox**, allowing users to fetch and display their real-time portfolio data, performance metrics, and transaction history by simply providing an access token.
+
+---
+
+## ✨ Core Features & Agent Suite
+
+The application is structured around a powerful dashboard and a suite of dedicated analytical agents:
+
+### 📊 Portfolio Dashboard
+* **Real-time Tracking:** Display of Total Portfolio Value, Total Gain/Loss, and Today's Change.
+* **Asset Allocation:** Detailed breakdown of investments across asset classes (Stocks, Bonds, ETFs, Cash).
+* **Performance Metrics:** Visualization of portfolio value over time (e.g., 6 months).
+* **Holdings & Activity:** Lists Top Holdings and recent transactions (BUY/SELL/DIVIDEND).
+
+### 🤖 Specialized AI Agents
+The navigation includes dedicated modules for deep-dive analysis and actionable insights:
+* **Mutual Funds Agent:** Focused analysis and tracking for mutual fund investments.
+* **Analysis Agent (Stock):** Provides in-depth financial analysis for individual stocks.
+* **Comparison Agent:** Tool for benchmarking the performance of multiple assets.
+* **Watchlist Agent:** Management module for tracking and monitoring potential investments.
+* **Sentiment Agent:** Gauges market mood and sentiment from news and data sources.
+* **Recommendations Agent:** AI-driven suggestions for portfolio optimization.
+* **News Agent:** Curated financial news aggregated by relevance.
+
+---
+
+## 🛠 Tech Stack
+
+f8n leverages a robust and modern development stack:
+
+* **Framework:** [Next.js](https://nextjs.org/) (React)
+* **Styling:** [Tailwind CSS](https://tailwindcss.com/)
+* **Data Integration:** REST APIs (Primary integration example: **Upstox API**)
+* **Deployment:** [Vercel](https://vercel.com/)
+
+---
+
+## ⚙️ Getting Started
+
+Follow these steps to set up and run the project locally.
+
+### Prerequisites
+
+* Node.js (LTS version)
+* Git
+
+### Installation
+
+1.  **Clone the repository:**
+    ```bash
+    git clone [Your-Repo-URL]
+    cd f8n
+    ```
+2.  **Install dependencies:**
+    ```bash
+    npm install
+    # or
+    yarn install
+    ```
+3.  **Set up Environment Variables:**
+
+    Create a file named `.env.local` in the root directory and add the necessary configuration.
+
+    ```env
+    # Required for real-time portfolio data integration (e.g., Upstox)
+    # The application specifically prompts for this token.
+    UPSTOX_ACCESS_TOKEN="YOUR_UPSTOX_API_TOKEN"
+
+    # Optional: For powering the AI Agent functionality
+    OPENAI_API_KEY="YOUR_GPT_MODEL_KEY" 
+    ```
+    ***Note:** If the access token is not provided, the dashboard will gracefully display sample data.*
+
+4.  **Run the development server:**
+    ```bash
+    npm run dev
+    # or
+    yarn dev
+    ```
+
+Open [http://localhost:3000](http://localhost:3000) with your browser to view the application.
+
+---
+
+## 🤝 Contributing
+
+We welcome contributions to enhance the f8n platform. Please follow the standard workflow:
+
+1.  Fork the Project
+2.  Create your Feature Branch (`git checkout -b feature/NewAgent`)
+3.  Commit your Changes (`git commit -m 'Feat: Added new Market Agent'`)
+4.  Push to the Branch (`git push origin feature/NewAgent`)
+5.  Open a Pull Request
+
+---
+
+## 📝 License
+
+Distributed under the MIT License. See `LICENSE` for more information.
