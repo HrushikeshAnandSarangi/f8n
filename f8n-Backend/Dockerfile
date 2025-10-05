@@ -2,23 +2,37 @@
 FROM python:3.11.9-slim
 
 # 2. Set environment variables for better Python performance
-ENV PYTHONDONTWRITEBYTECODE 1
-ENV PYTHONUNBUFFERED 1
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
+ENV PIP_NO_CACHE_DIR=1
+ENV PIP_DISABLE_PIP_VERSION_CHECK=1
 
-# 3. Create a non-root directory for the application
+# 3. Install system dependencies
+RUN apt-get update && apt-get install -y \
+    gcc \
+    g++ \
+    git \
+    build-essential \
+    libpq-dev \
+    && rm -rf /var/lib/apt/lists/*
+
+# 4. Create a non-root directory for the application
 WORKDIR /app
 
-# 4. Copy and install dependencies
-COPY requirements.txt ./
-# Force pip to use the official index to avoid repository issues
-RUN pip install --no-cache-dir --index-url https://pypi.org/simple/ -r requirements.txt
+# 5. Upgrade pip first
+RUN pip install --upgrade pip setuptools wheel
 
-# 5. Copy the rest of the application code
+# 6. Copy and install dependencies
+COPY requirements.txt ./
+
+# 7. Install dependencies with verbose output
+RUN pip install --no-cache-dir -r requirements.txt --verbose
+
+# 8. Copy the rest of the application code
 COPY . .
 
-# 6. Expose the port Gunicorn will run on
+# 9. Expose the port
 EXPOSE 8000
 
-# 7. Use Gunicorn to run the app instead of the development server
-#    Replace 'f8n.wsgi' with your actual Django project's WSGI file path.
-CMD ["python","manage.py","runserver","0.0.0.0:8000"]
+# 10. Run the application
+CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
