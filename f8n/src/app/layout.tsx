@@ -1,23 +1,16 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
-import "./globals.css";
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
-import PolkaBackground from "@/components/Background";
+import { Gabarito } from "next/font/google";
+import { SideNav } from "@/components/nav";
+import { siteConfig } from "@/config/site";
+import { cn } from "@/lib/utils";
+import "@/style/globals.css";
+import { Providers } from "./providers";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
+const gabarito = Gabarito({ subsets: ["latin"], variable: "--font-gabarito" });
 
 export const metadata: Metadata = {
-  title: "f8n",
-  description: "Financial Automation",
+  title: siteConfig.title,
+  description: siteConfig.description,
 };
 
 export default function RootLayout({
@@ -26,16 +19,15 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <Navbar/>
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        <PolkaBackground/>
-        {children}
-
+    <html lang="en" suppressHydrationWarning>
+      <body className={cn("bg-background font-sans", gabarito.variable)}>
+        <Providers>
+          <div className="flex min-h-[100dvh]">
+            <SideNav />
+            <div className="flex-grow overflow-auto">{children}</div>
+          </div>
+        </Providers>
       </body>
-      <Footer/>
     </html>
   );
 }

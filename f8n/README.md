@@ -1,36 +1,93 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# VisActor Next.js Dashboard Template
 
-## Getting Started
+A modern dashboard template built with [VisActor](https://visactor.io/) and Next.js, featuring a beautiful UI and rich data visualization components.
 
-First, run the development server:
+[Live Demo](https://visactor-next-template.vercel.app/)
+
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?demo-description=A%20modern%20dashboard%20with%20VisActor%20charts%2C%20dark%20mode%2C%20and%20data%20visualization%20for%20seamless%20analytics.&demo-image=%2F%2Fimages.ctfassets.net%2Fe5382hct74si%2F646TLqKGSTOnp1CD1IUqoM%2Fa119adac1f5a844f9d42f807ddc075f5%2Fthumbnail.png&demo-title=VisActor%20Next.js%20Template&demo-url=https%3A%2F%2Fvisactor-next-template.vercel.app%2F&from=templates&project-name=VisActor%20Next.js%20Template&repository-name=visactor-nextjs-template&repository-url=https%3A%2F%2Fgithub.com%2Fmengxi-ream%2Fvisactor-next-template&skippable-integrations=1)
+
+## Features
+
+- 📊 **Rich Visualizations** - Powered by VisActor, including bar charts, gauge charts, circle packing charts, and more
+- 🌗 **Dark Mode** - Seamless dark/light mode switching with system preference support
+- 📱 **Responsive Design** - Fully responsive layout that works on all devices
+- 🎨 **Beautiful UI** - Modern and clean interface built with Tailwind CSS
+- ⚡️ **Next.js 15** - Built on the latest Next.js features and best practices
+- 🔄 **State Management** - Efficient state management with Jotai
+- 📦 **Component Library** - Includes Shadcn components styled with Tailwind
+
+## Tech Stack
+
+- [Next.js](https://nextjs.org/) - React framework
+- [VisActor](https://visactor.io/) - Visualization library
+- [Tailwind CSS](https://tailwindcss.com/) - CSS framework
+- [Shadcn](https://ui.shadcn.com/) - UI components
+- [Jotai](https://jotai.org/) - State management
+- [TypeScript](https://www.typescriptlang.org/) - Type safety
+
+## Quick Start
+
+You can deploy this template to Vercel by clicking the button above, or clone this repository and run it locally.
+
+[Github Repo](https://github.com/mengxi-ream/visactor-next-template)
+
+1. Clone this repository
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone https://github.com/mengxi-ream/visactor-next-template
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2. Install dependencies
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+pnpm install
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+3. Run the development server
 
-## Learn More
+```bash
+pnpm dev
+```
 
-To learn more about Next.js, take a look at the following resources:
+4. Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Project Structure
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```bash
+src/
+├── app/ # App router pages
+├── components/ # React components
+│ ├── chart-blocks/ # Chart components
+│ ├── nav/ # Navigation components
+│ └── ui/ # UI components
+├── config/ # Configuration files
+├── data/ # Sample data
+├── hooks/ # Custom hooks
+├── lib/ # Utility functions
+├── style/ # Global style
+└── types/ # TypeScript types
+```
 
-## Deploy on Vercel
+## Charts
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+This template includes several chart examples:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- Average Tickets Created (Bar Chart)
+- Ticket by Channels (Gauge Chart)
+- Conversions (Circle Packing Chart)
+- Customer Satisfaction (Linear Progress)
+- Metrics Overview
+
+## Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## Acknowledgements
+
+- [VisActor](https://visactor.io/) - For the amazing visualization library
+- [Vercel](https://vercel.com) - For the incredible deployment platform
+- [Next.js](https://nextjs.org/) - For the awesome React framework

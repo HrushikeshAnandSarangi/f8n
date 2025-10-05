@@ -1,0 +1,135 @@
+# ========================================
+# OS & Editor Specific
+# ========================================
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# ========================================
+# Python Bytecode
+# ========================================
+__pycache__/
+*.py[cod]
+*$py.class
+
+# ========================================
+# C extensions
+*.so
+
+# ========================================
+# Distribution / Packaging
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# ========================================
+# PyInstaller
+*.manifest
+*.spec
+
+# ========================================
+# Installer Logs
+pip-log.txt
+pip-delete-this-directory.txt
+
+# ========================================
+# Unit Test / Coverage
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+.pytest_cache/
+.hypothesis/
+.mypy_cache/
+.dmypy.json
+.pytype/
+.pyre/
+.ruff_cache/
+
+# ========================================
+# Django Specific
+*.log
+local_settings.py
+db.sqlite3
+db.sqlite3-journal
+media/
+staticfiles/  # if you're collecting static here in prod
+
+# ========================================
+# Environment & Secrets
+.env
+.env.*
+.venv/
+venv/
+ENV/
+env/
+env.bak/
+venv.bak/
+
+# ========================================
+# Django Migrations (if generated locally but not needed in version control)
+# (Optional - comment out if you version control migrations)
+**/migrations/__pycache__/
+**/migrations/*.py[cod]
+**/migrations/*.pyc
+
+# ========================================
+# Task Queues
+celerybeat-schedule
+celerybeat.pid
+
+# ========================================
+# Tools & Projects
+.ropeproject
+.spyderproject
+.spyproject
+.pybuilder/
+target/
+__pypackages__/
+.pdm.toml
+.pdm-python
+.pdm-build/
+.pypirc
+
+# ========================================
+# Docs
+docs/_build/
+site/
+
+# ========================================
+# SageMath
+*.sage.py
+
+# ========================================
+# Elastic Beanstalk / AWS
+.elasticbeanstalk/
+*.ebextensions/
+
+# ========================================
+# SQLite backups
+*.sqlite3
+*.sqlite3-journal
