@@ -38,7 +38,6 @@ a,
 button,
 svg,
 [class*="blue"],
-.bg-blue-500,
 .border-blue-500 {
   color: #ff2fc3 !important;
   background-color: #ff2fc3 !important;
