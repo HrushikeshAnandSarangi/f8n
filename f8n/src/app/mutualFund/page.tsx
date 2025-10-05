@@ -8,7 +8,7 @@ const FMP_BASE_URL = 'https://financialmodelingprep.com/api/v3'
 interface Fund {
   id: string;
   name: string;
-  category: TooltipTerm;
+  category: string; // Changed to string to accommodate dynamic API data
   rating: number;
   returns: string;
   risk: string;
@@ -32,11 +32,11 @@ const tooltipData = {
   "Min SIP": "The minimum amount required to start a Systematic Investment Plan in a particular fund."
 };
 
-// Custom Tooltip component
+// A specific type for known tooltip terms
 type TooltipTerm = keyof typeof tooltipData;
 
 interface TooltipProps {
-  term: TooltipTerm;
+  term: string; // Changed to string for flexibility
   children: React.ReactNode;
 }
 
@@ -53,7 +53,7 @@ const Tooltip = ({ term, children }: TooltipProps) => {
         />
         {isVisible && (
             <div className="absolute z-10 w-64 p-3 text-sm bg-white border rounded-lg shadow-lg dark:bg-gray-800 dark:border-gray-700 top-full left-0 mt-1">
-              {tooltipData[term] || `Definition for ${term}`}
+              {tooltipData[term as TooltipTerm] || `No definition available for ${term}.`}
             </div>
         )}
       </div>
@@ -66,7 +66,7 @@ const fetchFundList = async (): Promise<Fund[]> => {
     if (!response.ok) throw new Error('Failed to fetch ETFs');
     const etfList = await response.json();
 
-    return await Promise.all(
+    const fundData = await Promise.all(
         etfList.slice(0, 10).map(async (etf: any) => {
           try {
             const performanceRes = await fetch(
@@ -76,10 +76,10 @@ const fetchFundList = async (): Promise<Fund[]> => {
             const historical = performanceData.historical?.slice(-365) || [];
 
             const latestPrice = historical.length > 0 ? historical[historical.length - 1].close : etf.price;
-            const minSip = Math.max(500, Math.ceil(latestPrice / 100) * 100); // Round up to nearest 100, min 500
+            const minSip = Math.max(500, Math.ceil(latestPrice / 100) * 100);
 
             const startPrice = historical.length > 0 ? historical[0].close : latestPrice;
-            const returns = ((latestPrice - startPrice) / startPrice * 100).toFixed(1);
+            const returns = startPrice > 0 ? ((latestPrice - startPrice) / startPrice * 100).toFixed(1) : '0.0';
 
             return {
               id: etf.symbol,
@@ -96,7 +96,8 @@ const fetchFundList = async (): Promise<Fund[]> => {
             return null;
           }
         })
-    ).then(results => results.filter(Boolean) as Fund[]);
+    );
+    return fundData.filter((fund): fund is Fund => fund !== null);
 
   } catch (error) {
     console.error("Error fetching ETF list:", error);
@@ -127,11 +128,11 @@ export default function MutualFunds() {
               parseFloat(b.returns) - parseFloat(a.returns)).slice(0, 3));
           setCategories([...new Set(etfData.map(f => f.category))].slice(0, 3));
         } else {
-          throw new Error("No ETF data available");
+          throw new Error("No ETF data available. Displaying fallback data.");
         }
       } catch (err) {
         setError(err instanceof Error ? err.message : "Failed to load data");
-        // Fallback data with proper minSip calculation
+        // Fallback data
         const fallbackData: Fund[] = [
           {
             id: 'SPY',
@@ -179,8 +180,8 @@ export default function MutualFunds() {
       'Medium': { color: 'bg-yellow-500', width: 'w-2/4' },
       'High': { color: 'bg-red-500', width: 'w-full' }
     };
-
-    const { color, width } = levels[risk as keyof typeof levels] || levels.Medium;
+    const riskLevel = risk as keyof typeof levels;
+    const { color, width } = levels[riskLevel] || levels.Medium;
 
     return (
         <div className="flex items-center">
@@ -201,7 +202,7 @@ export default function MutualFunds() {
                 <p>Loading Mutual Funds data...</p>
               </div>
             </div>
-        ) : error ? (
+        ) : error && funds.length === 0 ? (
             <div className="rounded-lg border bg-red-50 p-6 text-red-800 dark:bg-red-900/20 dark:text-red-400">
               <h3 className="font-semibold">Notice</h3>
               <p>{error}</p>
@@ -225,9 +226,9 @@ export default function MutualFunds() {
                             </div>
                           </div>
                           <div className="flex items-center gap-2">
-                      <span className="rounded-full bg-green-100 px-2 py-1 text-sm text-green-800 dark:bg-green-900/20 dark:text-green-400">
-                        <Tooltip term="Returns">{fund.returns}</Tooltip>
-                      </span>
+                            <span className="rounded-full bg-green-100 px-2 py-1 text-sm text-green-800 dark:bg-green-900/20 dark:text-green-400">
+                              <Tooltip term="Returns">{fund.returns}</Tooltip>
+                            </span>
                             <div className="text-right">
                               <div className="text-sm">₹{fund.price.toFixed(2)}</div>
                               <div className="text-xs text-gray-500">
@@ -250,9 +251,9 @@ export default function MutualFunds() {
                     {categories.map(category => (
                         <div key={category} className="rounded-lg border p-4 dark:border-gray-700">
                           <div className="flex items-center justify-between">
-                      <span className="font-medium">
-                        <Tooltip term={category as TooltipTerm}>{category}</Tooltip>
-                      </span>
+                            <span className="font-medium">
+                              <Tooltip term={category}>{category}</Tooltip>
+                            </span>
                             <button className="rounded-full bg-blue-100 px-3 py-1 text-sm text-blue-800 hover:bg-blue-200 dark:bg-blue-900/20 dark:text-blue-400">
                               View Mutual Funds
                             </button>
@@ -362,9 +363,9 @@ export default function MutualFunds() {
                             <tr key={fund.id} className="border-t hover:bg-gray-50 dark:border-gray-700 dark:hover:bg-gray-700">
                               <td className="px-6 py-4">{fund.name}</td>
                               <td className="px-6 py-4">
-                          <span className="rounded-full bg-purple-100 px-2 py-1 text-sm text-purple-800 dark:bg-purple-900/20 dark:text-purple-400">
-                            <Tooltip term={fund.category}>{fund.category}</Tooltip>
-                          </span>
+                                <span className="rounded-full bg-purple-100 px-2 py-1 text-sm text-purple-800 dark:bg-purple-900/20 dark:text-purple-400">
+                                  <Tooltip term={fund.category}>{fund.category}</Tooltip>
+                                </span>
                               </td>
                               <td className="px-6 py-4">
                                 <div className="flex items-center">
