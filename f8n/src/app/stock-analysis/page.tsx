@@ -90,7 +90,7 @@ export default function AnalysisPage() {
     const [selectedSymbol, setSelectedSymbol] = useState('AAPL');
     const [isLoading, setIsLoading] = useState(false);
     const [analysisError, setAnalysisError] = useState<string | null>(null);
-    const stockListRef = useRef(null);
+    const stockListRef = useRef<HTMLDivElement>(null);
 
     const handleScroll = () => {
         if (stockListRef.current) {
@@ -119,7 +119,7 @@ export default function AnalysisPage() {
             setStockData({
                 symbol: symbol,
                 price: response.data.latest_close,
-                change: response.data.daily_return * 100,
+                change: (response.data.daily_return ?? 0) * 100,
                 chart: mockChartData,
                 analysis: response.data
             });
@@ -183,9 +183,9 @@ export default function AnalysisPage() {
                                         {stockData.symbol} Stock Analysis
                                     </h3>
                                     <span className={`px-2 py-1 rounded text-sm ${
-                                        stockData.change >= 0 ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400' : 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400'
+                                        (stockData.change ?? 0) >= 0 ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400' : 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400'
                                     }`}>
-                                        {stockData.change >= 0 ? '+' : ''}{stockData.change.toFixed(2)}%
+                                        {(stockData.change ?? 0) >= 0 ? '+' : ''}{(stockData.change ?? 0).toFixed(2)}%
                                     </span>
                                 </div>
 
@@ -201,17 +201,17 @@ export default function AnalysisPage() {
                                                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
                                                     <div className="bg-gray-50 p-3 rounded dark:bg-gray-700">
                                                         <p className="text-sm text-gray-500 dark:text-gray-400">Current Price</p>
-                                                        <p className="text-xl font-bold text-gray-900 dark:text-white">${stockData.analysis.latest_close.toFixed(2)}</p>
+                                                        <p className="text-xl font-bold text-gray-900 dark:text-white">${(stockData.analysis.latest_close ?? 0).toFixed(2)}</p>
                                                     </div>
                                                     <div className="bg-gray-50 p-3 rounded dark:bg-gray-700">
                                                         <p className="text-sm text-gray-500 dark:text-gray-400">Daily Return</p>
-                                                        <p className={`text-xl font-bold ${stockData.analysis.daily_return >= 0 ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'}`}>
-                                                            {(stockData.analysis.daily_return * 100).toFixed(2)}%
+                                                        <p className={`text-xl font-bold ${(stockData.analysis.daily_return ?? 0) >= 0 ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'}`}>
+                                                            {((stockData.analysis.daily_return ?? 0) * 100).toFixed(2)}%
                                                         </p>
                                                     </div>
                                                     <div className="bg-gray-50 p-3 rounded dark:bg-gray-700">
                                                         <p className="text-sm text-gray-500 dark:text-gray-400">RSI (14)</p>
-                                                        <p className="text-xl font-bold text-gray-900 dark:text-white">{stockData.analysis.rsi.toFixed(2)}</p>
+                                                        <p className="text-xl font-bold text-gray-900 dark:text-white">{(stockData.analysis.rsi ?? 0).toFixed(2)}</p>
                                                     </div>
                                                     <div className="bg-gray-50 p-3 rounded dark:bg-gray-700">
                                                         <p className="text-sm text-gray-500 dark:text-gray-400">Risk Level</p>
@@ -224,17 +224,17 @@ export default function AnalysisPage() {
                                                 <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-4">
                                                     <div className="bg-gray-50 p-3 rounded dark:bg-gray-700">
                                                         <p className="text-sm text-gray-500 dark:text-gray-400">MACD</p>
-                                                        <p className={`text-lg font-bold ${stockData.analysis.macd >= 0 ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'}`}>
-                                                            {stockData.analysis.macd.toFixed(2)}
+                                                        <p className={`text-lg font-bold ${(stockData.analysis.macd ?? 0) >= 0 ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'}`}>
+                                                            {(stockData.analysis.macd ?? 0).toFixed(2)}
                                                         </p>
                                                     </div>
                                                     <div className="bg-gray-50 p-3 rounded dark:bg-gray-700">
                                                         <p className="text-sm text-gray-500 dark:text-gray-400">50-Day MA</p>
-                                                        <p className="text-lg font-bold text-gray-900 dark:text-white">${stockData.analysis.ma_50.toFixed(2)}</p>
+                                                        <p className="text-lg font-bold text-gray-900 dark:text-white">${(stockData.analysis.ma_50 ?? 0).toFixed(2)}</p>
                                                     </div>
                                                     <div className="bg-gray-50 p-3 rounded dark:bg-gray-700">
                                                         <p className="text-sm text-gray-500 dark:text-gray-400">200-Day MA</p>
-                                                        <p className="text-lg font-bold text-gray-900 dark:text-white">${stockData.analysis.ma_200.toFixed(2)}</p>
+                                                        <p className="text-lg font-bold text-gray-900 dark:text-white">${(stockData.analysis.ma_200 ?? 0).toFixed(2)}</p>
                                                     </div>
                                                 </div>
 
@@ -249,25 +249,25 @@ export default function AnalysisPage() {
                                                         <div className="mt-1">
                                                             <div className="flex justify-between text-xs">
                                                                 <span>Upper</span>
-                                                                <span className="font-medium">${stockData.analysis.bb_upper.toFixed(2)}</span>
+                                                                <span className="font-medium">${(stockData.analysis.bb_upper ?? 0).toFixed(2)}</span>
                                                             </div>
                                                             <div className="flex justify-between text-xs mt-1">
                                                                 <span>Middle</span>
-                                                                <span className="font-medium">${stockData.analysis.bb_middle.toFixed(2)}</span>
+                                                                <span className="font-medium">${(stockData.analysis.bb_middle ?? 0).toFixed(2)}</span>
                                                             </div>
                                                             <div className="flex justify-between text-xs mt-1">
                                                                 <span>Lower</span>
-                                                                <span className="font-medium">${stockData.analysis.bb_lower.toFixed(2)}</span>
+                                                                <span className="font-medium">${(stockData.analysis.bb_lower ?? 0).toFixed(2)}</span>
                                                             </div>
                                                         </div>
                                                     </div>
                                                     <div className="bg-gray-50 p-3 rounded dark:bg-gray-700">
                                                         <p className="text-sm text-gray-500 dark:text-gray-400">Volatility</p>
-                                                        <p className="text-xl font-bold text-gray-900 dark:text-white">{(stockData.analysis.volatility * 100).toFixed(2)}%</p>
+                                                        <p className="text-xl font-bold text-gray-900 dark:text-white">{((stockData.analysis.volatility ?? 0) * 100).toFixed(2)}%</p>
                                                     </div>
                                                     <div className="bg-gray-50 p-3 rounded dark:bg-gray-700">
                                                         <p className="text-sm text-gray-500 dark:text-gray-400">Sharpe Ratio</p>
-                                                        <p className="text-xl font-bold text-gray-900 dark:text-white">{stockData.analysis.sharpe_ratio.toFixed(4)}</p>
+                                                        <p className="text-xl font-bold text-gray-900 dark:text-white">{(stockData.analysis.sharpe_ratio ?? 0).toFixed(4)}</p>
                                                     </div>
                                                 </div>
                                             </div>
@@ -298,7 +298,7 @@ export default function AnalysisPage() {
                         {/* Price Trend Chart */}
                         <div className="mt-6 rounded-lg border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-700 dark:bg-gray-800">
                             <h3 className="mb-4 text-lg font-semibold text-gray-900 dark:text-white">
-                                 Live Price Movement (Last 5 Hours)
+                                Live Price Movement (Last 5 Hours)
                             </h3>
                             <div className="h-64">
                                 <ResponsiveContainer width="100%" height="100%">
@@ -327,7 +327,7 @@ export default function AnalysisPage() {
                                     <h2 className="text-lg font-semibold text-gray-900 dark:text-white"> Hot Stocks</h2>
                                     <p className="text-sm text-gray-500 dark:text-gray-400">Most traded today</p>
                                 </div>
-                                <button className="inline-flex items-center rounded-md border border-gray-300 bg-white px-31 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300">
+                                <button className="inline-flex items-center rounded-md border border-gray-300 bg-white px-3 py-1 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300">
                                     Today
                                 </button>
                             </div>
@@ -354,13 +354,13 @@ export default function AnalysisPage() {
                                                 <div className="font-medium text-gray-900 dark:text-white">${stock.price ? stock.price.toFixed(2) : 'N/A'}</div>
                                                 <div className="flex items-center justify-between w-full">
                                                     <div className={`flex items-center text-sm ${(stock.changesPercentage || 0) >= 0 ? 'text-green-500' : 'text-red-500'}`}>
-                                                            {(stock.changesPercentage || 0) >= 0 ? (
-                                                                <ArrowUp className="mr-1 h-3 w-3" />
-                                                            ) : (
-                                                                <ArrowDown className="mr-1 h-3 w-3" />
-                                                            )}
-                                                            {stock.changesPercentage != null ? Math.abs(stock.changesPercentage).toFixed(2) : 'N/A'}%
-                                                        </div>
+                                                        {(stock.changesPercentage || 0) >= 0 ? (
+                                                            <ArrowUp className="mr-1 h-3 w-3" />
+                                                        ) : (
+                                                            <ArrowDown className="mr-1 h-3 w-3" />
+                                                        )}
+                                                        {stock.changesPercentage != null ? Math.abs(stock.changesPercentage).toFixed(2) : 'N/A'}%
+                                                    </div>
                                                     <button
                                                         onClick={() => handleAnalyze(stock.symbol)}
                                                         disabled={isLoading}
