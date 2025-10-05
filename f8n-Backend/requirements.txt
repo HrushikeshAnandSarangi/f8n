@@ -71,7 +71,7 @@ openai==1.70.0
 orjson==3.10.16
 packaging==23.2
 pandas==2.1.4
-pandas-ta
+pandas-ta==0.4.71b0
 peewee==3.17.9
 pillow==11.1.0
 platformdirs==4.3.7
