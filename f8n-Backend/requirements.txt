@@ -70,7 +70,7 @@ numpy
 openai
 orjson
 packaging
-pandas
+pandas==2.2.2
 pandas-ta
 peewee
 pillow
