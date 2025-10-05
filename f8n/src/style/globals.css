@@ -28,11 +28,7 @@ body.dark * {
 /* ==== Convert All Blue Shades to Bright Pink ==== */
 
 /* Replace any blue-like colors with bright pink */
-* {
-  /* for inline-colored elements */
-  color: var(--pinkify, #ff2fc3) !important;
-  border-color: var(--pinkify, #ff2fc3) !important;
-}
+
 
 a,
 button,
