@@ -7,7 +7,13 @@
 /* ==== Force Light Mode ==== */
 
 /* Always set light background and dark text */
-
+:root,
+html,
+body {
+  color-scheme: light;
+  background-color: #ffffff !important;
+  color: #000000 !important;
+}
 
 /* Disable any dark-mode specific styles */
 [class*="dark"] *,
@@ -32,7 +38,6 @@ a,
 button,
 svg,
 [class*="blue"],
-.text-blue-500,
 .bg-blue-500,
 .border-blue-500 {
   color: #ff2fc3 !important;
