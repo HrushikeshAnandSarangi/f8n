@@ -71,7 +71,7 @@ openai
 orjson
 packaging
 pandas
-pandas_ta
+pandas-ta
 peewee
 pillow
 platformdirs
