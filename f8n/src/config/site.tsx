@@ -1,14 +1,8 @@
 import {
-  BarChart3,
-  LineChart,
-  ArrowRightLeft,
-  TrendingUp,
-  Eye,
-  Briefcase,
-  PieChart,
-  MessagesSquare,
-  Newspaper,
+  Activity,
+  History,
   Layout,
+  Workflow,
   type LucideIcon,
 } from "lucide-react";
 
@@ -21,7 +15,7 @@ export type Navigation = {
 
 export const siteConfig = {
   title: "f8n",
-  description: "Your Personal Finance Assistant",
+  description: "Build, backtest, and paper-trade crypto arbitrage agents",
 };
 
 export const navigations: Navigation[] = [
@@ -31,38 +25,18 @@ export const navigations: Navigation[] = [
     href: "/",
   },
   {
-    icon: PieChart,
-    name: "Mutual Funds Agent",
-    href: "/mutualFund",
+    icon: Workflow,
+    name: "Agents",
+    href: "/strategies",
   },
   {
-    icon: LineChart,
-    name: "Analysis Agent",
-    href: "/stock-analysis",
+    icon: History,
+    name: "Backtests",
+    href: "/backtest",
   },
   {
-    icon: ArrowRightLeft,
-    name: "Comparison Agent",
-    href: "/compare",
+    icon: Activity,
+    name: "Paper Trading",
+    href: "/paper-trading",
   },
-  {
-    icon: Eye,
-    name: "Watchlist Agent",
-    href: "/watchlist",
-  },
-  {
-    icon: BarChart3,
-    name: "Sentiment Agent",
-    href: "/analyst",
-  },
-  {
-    icon: MessagesSquare,
-    name: "Recommendations Agent",
-    href: "/recommendations",
-  },
-  {
-    icon: Newspaper,
-    name: "News Agent",
-    href: "/news",
-  }
 ];

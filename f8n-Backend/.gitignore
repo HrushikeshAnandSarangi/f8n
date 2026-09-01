@@ -71,11 +71,12 @@ coverage.xml
 .ruff_cache/
 
 # ========================================
-# Django Specific
+# Flask
 *.log
-local_settings.py
+instance/
 db.sqlite3
 db.sqlite3-journal
+f8n.db
 media/
 staticfiles/  # if you're collecting static here in prod
 

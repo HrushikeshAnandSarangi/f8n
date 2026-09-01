@@ -1,126 +1,100 @@
-# f8n: AI-Powered Investment Analytics & Portfolio Agent Suite 📈🤖
+# f8n: Visual Crypto Arbitrage Agent Builder 🤖📈
 
 <p align="center">
   <img src="https://f8n.vercel.app/f8n.svg" alt="f8n Logo" width="100"/>
 </p>
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Deployed with Vercel](https://vercel.com/button)](https://f8n.vercel.app/)
-[![Built with Next.js](https://img.shields.io/badge/Built%20with-Next.js-black?style=flat&logo=next.js)](https://nextjs.org/)
-[![API Integration](https://img.shields.io/badge/Data%20Source-Upstox%20API-blue)](https://upstox.com/developer/api-documentation/)
+[![Built with Next.js](https://img.shields.io/badge/Frontend-Next.js-black?style=flat&logo=next.js)](https://nextjs.org/)
+[![Backend](https://img.shields.io/badge/Backend-Flask-000000?style=flat&logo=flask)](https://flask.palletsprojects.com/)
 
 ---
 
 ## ⭐️ Overview
 
-**f8n** is a sophisticated, agent-driven platform providing **AI-enhanced investment analytics** and a comprehensive **Portfolio Dashboard**. It is designed for modern investors who require deep insights, real-time tracking, and specialized analysis across their holdings.
+**f8n** lets you build a crypto trading agent **visually**, from pre-configured blocks on an n8n-style canvas, **backtest** it against real historical market data, and **deploy it as a paper-trading agent** to see it run live - all without ever touching real funds.
 
-A key feature is its seamless integration with brokerage APIs, particularly **Upstox**, allowing users to fetch and display their real-time portfolio data, performance metrics, and transaction history by simply providing an access token.
+An agent is a graph of blocks you wire together:
+
+```
+[Binance BTC/USDT] ─┐
+                     ├─▶ [Spread %] ─▶ [Threshold] ─▶ [Paper Buy]
+[Kraken BTC/USDT]  ──┘
+```
+
+The exact same graph is replayed against historical data for backtesting and polled live for paper trading, so what you test is what actually runs.
 
 ---
 
-## ✨ Core Features & Agent Suite
+## ✨ What you can build
 
-The application is structured around a powerful dashboard and a suite of dedicated analytical agents:
+- **Cross-exchange arbitrage agents** - compare a symbol's price across two exchanges (via [ccxt](https://github.com/ccxt/ccxt)) and trade the spread.
+- **Sentiment agents** - trade on a financial-tuned NLP sentiment score pulled from Reddit + Yahoo Finance news.
+- Mix and match: every block (price sources, sentiment, spread math, thresholds, AND/OR logic, buy/sell actions) is a pluggable, reusable node - the block registry (`GET /api/blocks`) is the single source of truth the canvas renders itself from, so new block types show up automatically.
 
-### 📊 Portfolio Dashboard
-* **Real-time Tracking:** Display of Total Portfolio Value, Total Gain/Loss, and Today's Change.
-* **Asset Allocation:** Detailed breakdown of investments across asset classes (Stocks, Bonds, ETFs, Cash).
-* **Performance Metrics:** Visualization of portfolio value over time (e.g., 6 months).
-* **Holdings & Activity:** Lists Top Holdings and recent transactions (BUY/SELL/DIVIDEND).
+**Paper trading only, always.** Binance orders go through the **Binance Testnet** (fake funds); any other exchange leg is simulated against that exchange's live public price. No code path in this project can place a real-money order.
 
-### 🤖 Specialized AI Agents
-The navigation includes dedicated modules for deep-dive analysis and actionable insights:
-* **Mutual Funds Agent:** Focused analysis and tracking for mutual fund investments.
-* **Analysis Agent (Stock):** Provides in-depth financial analysis for individual stocks.
-* **Comparison Agent:** Tool for benchmarking the performance of multiple assets.
-* **Watchlist Agent:** Management module for tracking and monitoring potential investments.
-* **Sentiment Agent:** Gauges market mood and sentiment from news and data sources.
-* **Recommendations Agent:** AI-driven suggestions for portfolio optimization.
-* **News Agent:** Curated financial news aggregated by relevance.
+**No accounts, no login.** This is a free tool - open it and start building; every agent, backtest, and paper session is visible to anyone who has the link.
 
 ---
 
 ## 🛠 Tech Stack
 
-f8n leverages a robust and modern development stack:
-
-* **Framework:** [Next.js](https://nextjs.org/) (React)
-* **Styling:** [Tailwind CSS](https://tailwindcss.com/)
-* **Data Integration:** REST APIs (Primary integration example: **Upstox API**)
-* **Deployment:** [Vercel](https://vercel.com/)
+| | |
+|---|---|
+| **Frontend** | [Next.js](https://nextjs.org/) (React), [React Flow](https://reactflow.dev/) for the agent canvas, Tailwind CSS, Recharts |
+| **Backend** | [Flask](https://flask.palletsprojects.com/), SQLAlchemy + Postgres, Flask-SocketIO (live updates), [ccxt](https://github.com/ccxt/ccxt) |
+| **Sentiment** | Reddit (praw) + Yahoo Finance news (newspaper3k), HuggingFace financial-sentiment model |
+| **Deployment** | Frontend on [Vercel](https://vercel.com/); backend as a plain Docker container (Render/Railway/Fly/any VPS) |
 
 ---
 
 ## ⚙️ Getting Started
 
-Follow these steps to set up and run the project locally.
+This is a two-part project: `f8n/` (Next.js frontend) and `f8n-Backend/` (Flask backend). See each directory's README for details.
 
-### Prerequisites
+### Fastest path (Docker Compose, backend)
 
-* Node.js (LTS version)
-* Git
+```bash
+cd f8n-Backend
+cp .env.example .env   # fill in Binance testnet + Reddit API keys (both free)
+docker compose up --build
+```
 
-### Installation
+This starts Postgres + the Flask API on `http://localhost:8000`.
 
-1.  **Clone the repository:**
-    ```bash
-    git clone [Your-Repo-URL]
-    cd f8n
-    ```
-2.  **Install dependencies:**
-    ```bash
-    npm install
-    # or
-    yarn install
-    ```
-3.  **Set up Environment Variables:**
+### Frontend
 
-    Create a file named `.env.local` in the root directory and add the necessary configuration.
+```bash
+cd f8n
+cp .env.example .env.local   # point NEXT_PUBLIC_API_URL / NEXT_PUBLIC_SOCKET_URL at the backend
+npm install --force
+npm run dev
+```
 
-    ```env
-    # Required for real-time portfolio data integration (e.g., Upstox)
-    # The application specifically prompts for this token.
-    UPSTOX_ACCESS_TOKEN="YOUR_UPSTOX_API_TOKEN"
-
-    # Optional: For powering the AI Agent functionality
-    OPENAI_API_KEY="YOUR_GPT_MODEL_KEY" 
-    ```
-    ***Note:** If the access token is not provided, the dashboard will gracefully display sample data.*
-
-4.  **Run the development server:**
-    ```bash
-    npm run dev
-    # or
-    yarn dev
-    ```
-
-Open [http://localhost:3000](http://localhost:3000) with your browser to view the application.
+Open [http://localhost:3000](http://localhost:3000) and build your first agent - no sign-up required.
 
 ---
 
-## 📊 Dashboard Overview
+## 📊 Pages
 
-| Section          | Description                          |
-|------------------|--------------------------------------|
-| **Portfolio Value** | Current total value and 24h change. |
-| **Gains/Losses** | Overall P&L with pie chart breakdown. |
-| **Asset Allocation** | Bar chart showing stocks, bonds, etc. |
-| **Top Holdings** | Table of your largest positions.    |
-| **Recent Transactions** | List of buys/sells with timestamps. |
+| Page | Description |
+|------|-------------|
+| **Dashboard** (`/`) | Overview of your agents and active paper sessions. |
+| **Agents** (`/strategies`) | List and create agents; opens the block-based builder. |
+| **Builder** (`/strategies/[id]/builder`) | The canvas: drag blocks from the palette, wire them up, save, backtest, or deploy. |
+| **Backtests** (`/backtest`) | Launch a backtest and browse history; each run shows an equity curve, summary metrics, and trade log. |
+| **Paper Trading** (`/paper-trading`) | Live agents: real-time equity curve, trade feed, and activity log over WebSocket. |
 
 ---
-
 
 ## 🤝 Contributing
 
-We welcome contributions to enhance the f8n platform. Please follow the standard workflow:
-
-1.  Fork the Project
-2.  Create your Feature Branch (`git checkout -b feature/NewAgent`)
-3.  Commit your Changes (`git commit -m 'Feat: Added new Market Agent'`)
-4.  Push to the Branch (`git push origin feature/NewAgent`)
-5.  Open a Pull Request
+1. Fork the project
+2. Create your feature branch (`git checkout -b feature/NewBlock`)
+3. Commit your changes
+4. Push to the branch
+5. Open a Pull Request
 
 ---
 

@@ -1,0 +1,35 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: f8n
+      POSTGRES_USER: f8n
+      POSTGRES_PASSWORD: f8n
+    ports:
+      - "5432:5432"
+    volumes:
+      - f8n_postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U f8n"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  backend:
+    build: .
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      DATABASE_URL: postgresql://f8n:f8n@postgres:5432/f8n
+    ports:
+      - "8000:8000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    command: >
+      sh -c "flask db upgrade && gunicorn --worker-class eventlet -w 1 --timeout 120 --bind 0.0.0.0:8000 wsgi:app"
+
+volumes:
+  f8n_postgres_data:
