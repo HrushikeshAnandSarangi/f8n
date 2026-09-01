@@ -13,13 +13,16 @@ python-dotenv==1.0.1
 ccxt==4.3.62
 pandas==2.2.2
 numpy==1.26.4
+requests==2.32.3
 
-praw==7.7.1
-newspaper3k==0.2.8
+# Sentiment: VADER + a small finance/crypto lexicon (app/sentiment_engine/pipeline.py) -
+# pure Python, no torch/transformers, orders of magnitude lighter than a transformer model.
+vaderSentiment==3.3.2
 beautifulsoup4==4.12.3
-lxml==4.9.3
-yfinance==0.2.40
-transformers==4.42.3
-torch==2.3.1
+
+# Sentiment data sources - each independently configurable per agent:
+praw==7.7.1          # Reddit (needs a free Reddit "script" app)
+feedparser==6.0.11   # RSS headlines (CoinDesk + Cointelegraph) - free, no API key ever
+yfinance==0.2.40      # Yahoo Finance headlines - free, no API key
 
 pytest==8.2.2

@@ -34,28 +34,39 @@ class ExchangeTickerBlock(BaseBlock):
 
 @register_block
 class SentimentBlock(BaseBlock):
-    """Reddit + news sentiment for a ticker, backed by the ported financial-sentiment
-    pipeline (see app/sentiment_engine/pipeline.py)."""
+    """Reddit + news sentiment for a ticker (VADER + a finance/crypto lexicon - see
+    app/sentiment_engine/pipeline.py). Each data source is independently toggleable;
+    RSS news needs no API key at all, the others are free but need a key/app to enable."""
 
     spec = BlockSpec(
         type="source.sentiment",
         category="source",
         label="Sentiment Score",
-        description="Reddit + news sentiment breakdown for a ticker (financial-tuned NLP model).",
+        description="Reddit + news sentiment breakdown for a ticker, from independently configurable free sources.",
         config_schema={
             "type": "object",
             "properties": {
                 "ticker": {"type": "string", "default": "BTC-USD"},
+                "use_reddit": {"type": "boolean", "default": True},
+                "use_rss_news": {"type": "boolean", "default": True},
+                "use_cryptopanic": {"type": "boolean", "default": False},
+                "use_yahoo_finance": {"type": "boolean", "default": False},
             },
             "required": ["ticker"],
         },
         inputs=[],
         outputs=[Port("reddit", "Reddit %", "object"), Port("news", "News %", "object")],
         # Sentiment sources are scraped, not streamed - polling every few seconds would
-        # hammer Reddit/Yahoo for no benefit, so this is minutes, not seconds.
+        # hammer Reddit/RSS/Yahoo for no benefit, so this is minutes, not seconds.
         poll_interval_seconds=600,
     )
 
     def execute(self, config, inputs, ctx):
-        data = ctx.get_sentiment(config["ticker"]) or {}
+        sources = {
+            "reddit": config.get("use_reddit", True),
+            "rss_news": config.get("use_rss_news", True),
+            "cryptopanic": config.get("use_cryptopanic", False),
+            "yahoo_finance": config.get("use_yahoo_finance", False),
+        }
+        data = ctx.get_sentiment(config["ticker"], sources=sources) or {}
         return {"reddit": data.get("reddit"), "news": data.get("news")}

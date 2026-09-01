@@ -35,7 +35,10 @@ python wsgi.py
 | `DATABASE_URL` | Postgres connection string (sqlite is used if unset - fine for local dev, not for production) |
 | `CORS_ORIGINS` | Frontend origin(s) allowed to call the API |
 | `BINANCE_TESTNET_API_KEY` / `BINANCE_TESTNET_SECRET` | Free keys from [testnet.binance.vision](https://testnet.binance.vision) - required to actually place testnet orders; without them, the paper bot simulates the Binance leg too |
-| `REDDIT_CLIENT_ID` / `REDDIT_CLIENT_SECRET` / `REDDIT_USER_AGENT` | A free "script" app from [reddit.com/prefs/apps](https://www.reddit.com/prefs/apps) - required for the sentiment source block |
+| `REDDIT_CLIENT_ID` / `REDDIT_CLIENT_SECRET` / `REDDIT_USER_AGENT` | A free "script" app from [reddit.com/prefs/apps](https://www.reddit.com/prefs/apps) - enables the Reddit sentiment source; skipped gracefully if unset |
+| `CRYPTOPANIC_API_KEY` | A free key from [cryptopanic.com/developers/api](https://cryptopanic.com/developers/api/) - enables the CryptoPanic sentiment source; skipped gracefully if unset |
+
+None of the sentiment env vars are required to run the app: RSS headlines (CoinDesk + Cointelegraph) and Yahoo Finance headlines both work with zero configuration, and each source in the `source.sentiment` block's config can be toggled independently per agent.
 
 ## Structure
 
@@ -45,7 +48,7 @@ app/
 ├── graph/           # GraphEngine (executes one tick of a strategy graph) + execution contexts
 ├── execution/        # Shared Portfolio (fill/PnL simulation) used by both backtest and paper trading
 ├── marketdata/        # ccxt exchange adapter + historical OHLCV fetch/cache
-├── sentiment_engine/   # Ported sentiment pipeline (praw + newspaper3k/yfinance + HF model)
+├── sentiment_engine/   # VADER + finance lexicon; Reddit/RSS/CryptoPanic/Yahoo sources
 ├── backtest/            # Replays a graph over historical data
 ├── papertrading/         # Runs a graph on a live polling loop; manages session threads
 ├── api/                   # Flask blueprints (blocks, strategies, backtests, paper-sessions - all open, no auth)
@@ -60,7 +63,7 @@ pip install -r requirements.txt
 pytest
 ```
 
-The test suite (`tests/`) covers block math, the graph engine, the backtest/portfolio simulation, and API smoke tests - all deterministic and network-free. It does not exercise live ccxt/Reddit/Binance calls; that's covered by manually running a real backtest/paper session as described in the root README.
+The test suite (`tests/`) covers block math, the graph engine, the backtest/portfolio simulation, sentiment scoring, and API smoke tests - all deterministic and network-free. It does not exercise live ccxt/Reddit/Binance/RSS calls; that's covered by manually running a real backtest/paper session as described in the root README.
 
 ## Deployment
 

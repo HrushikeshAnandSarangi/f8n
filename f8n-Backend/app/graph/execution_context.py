@@ -12,8 +12,9 @@ class ExecutionContext:
     def get_price(self, exchange: str, symbol: str):
         raise NotImplementedError
 
-    def get_sentiment(self, ticker: str):
-        """Returns {"reddit": {"positive", "negative", "neutral"}, "news": {...}}."""
+    def get_sentiment(self, ticker: str, sources: dict = None):
+        """Returns {"reddit": {"positive", "negative", "neutral"}, "news": {...}}.
+        `sources` toggles which data sources feed into it - see sentiment_engine.pipeline."""
         raise NotImplementedError
 
     def log(self, message: str, level: str = "info"):
@@ -46,7 +47,7 @@ class HistoricalContext(ExecutionContext):
             idx = 0
         return float(series.iloc[idx])
 
-    def get_sentiment(self, ticker):
+    def get_sentiment(self, ticker, sources=None):
         snapshots = self.sentiment_snapshots.get(ticker)
         if snapshots:
             timestamps = [snap[0] for snap in snapshots]
@@ -58,11 +59,12 @@ class HistoricalContext(ExecutionContext):
         # No sentiment history exists for this ticker at all: fetch live once and hold
         # it constant for the whole backtest. This is the documented approximation for
         # backtesting a live-scraped sentiment source.
-        if ticker not in self._live_sentiment_fallback:
+        cache_key = (ticker, tuple(sorted((sources or {}).items())))
+        if cache_key not in self._live_sentiment_fallback:
             from app.sentiment_engine.pipeline import fetch_sentiment
 
-            self._live_sentiment_fallback[ticker] = fetch_sentiment(ticker)
-        return self._live_sentiment_fallback[ticker]
+            self._live_sentiment_fallback[cache_key] = fetch_sentiment(ticker, sources=sources)
+        return self._live_sentiment_fallback[cache_key]
 
     def log(self, message, level="info"):
         self.logs.append({"timestamp": self.current_time, "level": level, "message": message})
@@ -91,9 +93,10 @@ class LiveContext(ExecutionContext):
             self._price_cache[key] = fetch_ticker_price(exchange, symbol)
         return self._price_cache[key]
 
-    def get_sentiment(self, ticker):
+    def get_sentiment(self, ticker, sources=None):
+        cache_key = (ticker, tuple(sorted((sources or {}).items())))
         now = time_module.time()
-        cached = self._sentiment_cache.get(ticker)
+        cached = self._sentiment_cache.get(cache_key)
         if cached and now - cached[0] < self.sentiment_ttl_seconds:
             return cached[1]
 
@@ -101,7 +104,7 @@ class LiveContext(ExecutionContext):
         from app.models.sentiment import SentimentSnapshot
         from app.sentiment_engine.pipeline import fetch_sentiment
 
-        data = fetch_sentiment(ticker)
+        data = fetch_sentiment(ticker, sources=sources)
         ts = datetime.utcnow()
         for source in ("reddit", "news"):
             breakdown = data.get(source) or {}
@@ -117,7 +120,7 @@ class LiveContext(ExecutionContext):
             )
         db.session.commit()
 
-        LiveContext._sentiment_cache[ticker] = (now, data)
+        LiveContext._sentiment_cache[cache_key] = (now, data)
         return data
 
     def log(self, message, level="info"):

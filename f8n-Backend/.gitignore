@@ -84,6 +84,7 @@ staticfiles/  # if you're collecting static here in prod
 # Environment & Secrets
 .env
 .env.*
+!.env.example
 .venv/
 venv/
 ENV/

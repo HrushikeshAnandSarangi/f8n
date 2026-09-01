@@ -40,6 +40,21 @@ export function ConfigPanel({
         )}
         {Object.entries(properties).map(([key, schema]) => {
           const value = config[key] ?? schema.default ?? "";
+
+          if (schema.type === "boolean") {
+            return (
+              <label key={key} className="flex cursor-pointer items-center gap-2 text-sm">
+                <input
+                  type="checkbox"
+                  checked={Boolean(value)}
+                  onChange={(e) => updateField(key, e.target.checked)}
+                  className="h-4 w-4 rounded border-input"
+                />
+                <span className="capitalize text-muted-foreground">{key.replace(/_/g, " ")}</span>
+              </label>
+            );
+          }
+
           return (
             <div key={key}>
               <label className="mb-1 block text-xs font-medium capitalize text-muted-foreground">
