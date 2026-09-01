@@ -11,6 +11,7 @@ import {
   MiniMap,
   ReactFlow,
   ReactFlowProvider,
+  useReactFlow,
   type Connection,
   type Edge,
   type EdgeChange,
@@ -64,6 +65,7 @@ function BuilderInner() {
   const params = useParams<{ id: string }>();
   const strategyId = params.id;
   const router = useRouter();
+  const { fitView } = useReactFlow();
 
   const { data: blocks } = useSWR<BlockSpec[]>("/blocks/", fetcher);
   const { data: strategy } = useSWR<Strategy>(`/strategies/${strategyId}`, fetcher);
@@ -90,8 +92,13 @@ function BuilderInner() {
       setNodes(initialNodes);
       setEdges(initialEdges);
       setLoadedFor(strategyId);
+
+      // `fitView` as a static prop only fits whatever was there at first paint;
+      // these nodes just arrived asynchronously, so fit to them explicitly once
+      // React Flow has had a chance to register them.
+      requestAnimationFrame(() => fitView({ padding: 0.2, duration: 200 }));
     }
-  }, [strategy, blocks, specByType, strategyId, loadedFor]);
+  }, [strategy, blocks, specByType, strategyId, loadedFor, fitView]);
 
   const onNodesChange = useCallback(
     (changes: NodeChange<BlockNode>[]) => setNodes((nds) => applyNodeChanges(changes, nds)),

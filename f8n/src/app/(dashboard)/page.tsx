@@ -1,6 +1,7 @@
 "use client";
 
-import { Activity, ArrowRight, History, Plus, Workflow } from "lucide-react";
+import { Switch } from "@headlessui/react";
+import { Activity, ArrowRight, History, Plus, RotateCcw, Sparkles, Workflow } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -8,12 +9,15 @@ import useSWR from "swr";
 import Container from "@/components/container";
 import { Button } from "@/components/ui/button";
 import { api } from "@/lib/api";
+import { useDemoMode } from "@/lib/demo/mode";
 import { fetcher } from "@/lib/swr";
 import type { BacktestRun, PaperSession, Strategy } from "@/types/agent";
+import { cn } from "@/lib/utils";
 
 export default function DashboardPage() {
   const router = useRouter();
   const [creating, setCreating] = useState(false);
+  const [demoMode, setDemoMode] = useDemoMode();
   const { data: strategies } = useSWR<Strategy[]>("/strategies", fetcher);
   const { data: backtests } = useSWR<BacktestRun[]>("/backtests", fetcher);
   const { data: sessions } = useSWR<PaperSession[]>("/paper-sessions", fetcher, { refreshInterval: 5000 });
@@ -33,6 +37,12 @@ export default function DashboardPage() {
     }
   };
 
+  const resetDemoData = async () => {
+    const { resetDemoData: reset } = await import("@/lib/demo/store");
+    reset();
+    window.location.reload();
+  };
+
   return (
     <Container className="space-y-8 py-8">
       <div className="flex flex-col gap-4 tablet:flex-row tablet:items-center tablet:justify-between">
@@ -46,6 +56,46 @@ export default function DashboardPage() {
           <Plus className="mr-2 h-4 w-4" />
           New Agent
         </Button>
+      </div>
+
+      <div className="flex flex-col gap-4 rounded-lg border border-border bg-card p-4 tablet:flex-row tablet:items-center tablet:justify-between">
+        <div className="flex items-start gap-3">
+          <Sparkles className="mt-0.5 h-5 w-5 shrink-0 text-amber-500" />
+          <div>
+            <p className="font-medium">Demo Mode</p>
+            <p className="text-sm text-muted-foreground">
+              Explore the whole app with realistic simulated agents, backtests, and a live paper session -
+              no backend connection required. Nothing here touches real data.
+            </p>
+          </div>
+        </div>
+        <div className="flex shrink-0 items-center gap-3">
+          {demoMode && (
+            <button
+              onClick={resetDemoData}
+              className="flex items-center text-xs text-muted-foreground hover:text-foreground"
+              title="Clear and reseed demo data"
+            >
+              <RotateCcw className="mr-1 h-3.5 w-3.5" />
+              Reset demo data
+            </button>
+          )}
+          <Switch
+            checked={demoMode}
+            onChange={setDemoMode}
+            className={cn(
+              "relative inline-flex h-6 w-11 items-center rounded-full transition-colors",
+              demoMode ? "bg-amber-500" : "bg-slate-300 dark:bg-slate-700",
+            )}
+          >
+            <span
+              className={cn(
+                "inline-block h-4 w-4 transform rounded-full bg-white transition-transform",
+                demoMode ? "translate-x-6" : "translate-x-1",
+              )}
+            />
+          </Switch>
+        </div>
       </div>
 
       <div className="grid grid-cols-1 gap-4 tablet:grid-cols-3">

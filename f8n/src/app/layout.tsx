@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Gabarito } from "next/font/google";
+import { DemoModeBanner } from "@/components/demo-mode-banner";
 import { SideNav } from "@/components/nav";
 import { siteConfig } from "@/config/site";
 import { cn } from "@/lib/utils";
@@ -26,6 +27,7 @@ export default function RootLayout({
             <SideNav />
             <div className="flex-grow overflow-auto">{children}</div>
           </div>
+          <DemoModeBanner />
         </Providers>
       </body>
     </html>

@@ -7,6 +7,7 @@ import useSWR from "swr";
 import { PageHeader } from "@/components/page-header";
 import { Button } from "@/components/ui/button";
 import { api } from "@/lib/api";
+import { useDemoMode } from "@/lib/demo/mode";
 import { fetcher } from "@/lib/swr";
 import { getSocket } from "@/lib/socket";
 import type { ActivityLogEntry, EquityPoint, PaperSession, PaperTrade } from "@/types/agent";
@@ -14,6 +15,7 @@ import type { ActivityLogEntry, EquityPoint, PaperSession, PaperTrade } from "@/
 export default function PaperSessionDetailPage() {
   const params = useParams<{ id: string }>();
   const sessionId = params.id;
+  const [demoMode] = useDemoMode();
   const { data: session, mutate } = useSWR<PaperSession>(`/paper-sessions/${sessionId}`, fetcher);
 
   const [equityCurve, setEquityCurve] = useState<EquityPoint[]>([]);
@@ -47,7 +49,7 @@ export default function PaperSessionDetailPage() {
       socket.off("paper_trade", onTrade);
       socket.off("paper_activity", onActivity);
     };
-  }, [sessionId]);
+  }, [sessionId, demoMode]);
 
   const stop = async () => {
     setStopping(true);
