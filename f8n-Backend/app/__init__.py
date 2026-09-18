@@ -6,10 +6,19 @@ from .config import config_by_name
 from .extensions import cors, db, migrate, socketio
 
 
-def create_app(config_name=None):
+def create_app(config_name=None, config_overrides=None):
+    """`config_overrides` lets a caller (currently just the benchmarks - see
+    benchmarks/bench_paper_concurrency.py) set config after the named config
+    class but before db.init_app(), which is the only point a per-call override
+    like a real file-based SQLALCHEMY_DATABASE_URI actually takes effect -
+    mutating app.config afterwards is too late, since init_app() has already
+    built the engine (and, for the default TestingConfig sqlite ":memory:" URI,
+    committed to a single-connection StaticPool)."""
     config_name = config_name or os.environ.get("FLASK_ENV", "development")
     app = Flask(__name__)
     app.config.from_object(config_by_name[config_name])
+    if config_overrides:
+        app.config.update(config_overrides)
 
     db_uri = app.config.get("SQLALCHEMY_DATABASE_URI", "")
     if db_uri.startswith("postgres://"):

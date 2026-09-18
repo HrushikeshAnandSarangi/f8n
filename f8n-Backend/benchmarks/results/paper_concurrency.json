@@ -1,0 +1,49 @@
+{
+  "run_at": "2026-09-18T13:25:11.601066+00:00",
+  "results": [
+    {
+      "sessions": 1,
+      "ticks_per_session": 30,
+      "total_ticks": 30,
+      "trades_fired": 1,
+      "wall_seconds": 0.20437500000116415,
+      "aggregate_ticks_per_sec": 146.78899082485194,
+      "tick_mean_ms": 6.77893333195243,
+      "tick_p50_ms": 6.213499989826232,
+      "tick_p95_ms": 8.641099993837997
+    },
+    {
+      "sessions": 5,
+      "ticks_per_session": 30,
+      "total_ticks": 150,
+      "trades_fired": 5,
+      "wall_seconds": 1.1343924999819137,
+      "aggregate_ticks_per_sec": 132.22936505873543,
+      "tick_mean_ms": 28.726991332951002,
+      "tick_p50_ms": 6.790499988710508,
+      "tick_p95_ms": 146.92070000455715
+    },
+    {
+      "sessions": 20,
+      "ticks_per_session": 30,
+      "total_ticks": 600,
+      "trades_fired": 20,
+      "wall_seconds": 4.571062300004996,
+      "aggregate_ticks_per_sec": 131.26051683857912,
+      "tick_mean_ms": 97.48822600090837,
+      "tick_p50_ms": 6.2827999936416745,
+      "tick_p95_ms": 366.09249998582527
+    },
+    {
+      "sessions": 50,
+      "ticks_per_session": 30,
+      "total_ticks": 1500,
+      "trades_fired": 50,
+      "wall_seconds": 10.958008399989922,
+      "aggregate_ticks_per_sec": 136.88618818738811,
+      "tick_mean_ms": 221.06693266679457,
+      "tick_p50_ms": 6.197799986694008,
+      "tick_p95_ms": 743.5238999896683
+    }
+  ]
+}

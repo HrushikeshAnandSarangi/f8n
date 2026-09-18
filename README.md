@@ -221,10 +221,16 @@ npm run build   # type-checks + production build
 The same `GraphEngine` that runs every backtest bar and every paper-trading poll handles
 **55,900+ ticks/sec** on a real agent's graph (5 nodes - the arbitrage example above) and
 stays above **900 ticks/sec** even at 250 nodes, on a single core with no compilation step.
-In practice a live paper session is bottlenecked by the exchange/Reddit/RSS call behind a
-source block, not by graph execution - see
-[`f8n-Backend/benchmarks/BENCHMARKS.md`](f8n-Backend/benchmarks/BENCHMARKS.md) for the full
-results table, methodology, and how to reproduce them with `python -m benchmarks.bench_engine`.
+
+That's not the bottleneck, and this isn't just asserted - it's measured: a real ccxt ticker
+fetch takes **~40,000-80,000x** longer than one engine tick, confirming a live paper session
+is bottlenecked entirely by the exchange/Reddit/RSS call behind a source block. Running many
+paper sessions at once has a real, measured ceiling too - throughput plateaus at ~130-150
+ticks/sec regardless of session count once the SQLite fallback DB is the shared bottleneck,
+which is exactly why Postgres is the "Recommended" `DATABASE_URL` above, not a suggestion.
+See [`f8n-Backend/benchmarks/BENCHMARKS.md`](f8n-Backend/benchmarks/BENCHMARKS.md) for all
+three benchmarks (engine, network, concurrent sessions), full results, methodology, and how
+to reproduce them.
 
 ## Deployment
 
