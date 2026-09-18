@@ -1,6 +1,7 @@
 "use client";
 
 import { Handle, Position, type NodeProps, type Node } from "@xyflow/react";
+import { InfoTooltip } from "@/components/ui/info-tooltip";
 import type { BlockSpec } from "@/types/agent";
 
 export type BlockNodeData = {
@@ -28,7 +29,10 @@ export function BlockNodeComponent({ data, selected }: NodeProps<BlockNode>) {
       }`}
     >
       <div className="border-b border-border px-3 py-2">
-        <div className="text-sm font-medium">{spec.label}</div>
+        <div className="flex items-center gap-1.5">
+          <div className="text-sm font-medium">{spec.label}</div>
+          <InfoTooltip text={spec.description} />
+        </div>
         <div className="text-[10px] uppercase tracking-wide text-muted-foreground">{spec.category}</div>
       </div>
 

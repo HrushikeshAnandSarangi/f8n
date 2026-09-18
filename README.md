@@ -20,6 +20,7 @@
 - [Configuration](#configuration)
 - [Project structure](#project-structure)
 - [Testing](#testing)
+- [Performance](#performance)
 - [Deployment](#deployment)
 - [Safety: this is a paper-trading tool](#safety-this-is-a-paper-trading-tool)
 - [Known limitations](#known-limitations)
@@ -214,6 +215,16 @@ The suite covers block math, the graph engine, the backtest/portfolio simulation
 cd f8n
 npm run build   # type-checks + production build
 ```
+
+## Performance
+
+The same `GraphEngine` that runs every backtest bar and every paper-trading poll handles
+**55,900+ ticks/sec** on a real agent's graph (5 nodes - the arbitrage example above) and
+stays above **900 ticks/sec** even at 250 nodes, on a single core with no compilation step.
+In practice a live paper session is bottlenecked by the exchange/Reddit/RSS call behind a
+source block, not by graph execution - see
+[`f8n-Backend/benchmarks/BENCHMARKS.md`](f8n-Backend/benchmarks/BENCHMARKS.md) for the full
+results table, methodology, and how to reproduce them with `python -m benchmarks.bench_engine`.
 
 ## Deployment
 

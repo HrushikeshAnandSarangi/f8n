@@ -1,5 +1,6 @@
 "use client";
 
+import { InfoTooltip } from "@/components/ui/info-tooltip";
 import type { BlockCategory, BlockSpec } from "@/types/agent";
 
 const CATEGORY_LABELS: Record<BlockCategory, string> = {
@@ -23,14 +24,15 @@ export function BlockPalette({ blocks, onAdd }: { blocks: BlockSpec[]; onAdd: (s
             <p className="mb-1 px-1 text-xs font-semibold text-muted-foreground">{CATEGORY_LABELS[category]}</p>
             <div className="space-y-1">
               {items.map((spec) => (
-                <button
+                <div
                   key={spec.type}
-                  onClick={() => onAdd(spec)}
-                  title={spec.description}
-                  className="w-full rounded-md border border-transparent px-2 py-1.5 text-left text-sm hover:border-border hover:bg-accent"
+                  className="flex items-center gap-1 rounded-md border border-transparent pl-2 pr-1 hover:border-border hover:bg-accent"
                 >
-                  {spec.label}
-                </button>
+                  <button onClick={() => onAdd(spec)} className="flex-1 py-1.5 text-left text-sm">
+                    {spec.label}
+                  </button>
+                  <InfoTooltip text={spec.description} />
+                </div>
               ))}
             </div>
           </div>

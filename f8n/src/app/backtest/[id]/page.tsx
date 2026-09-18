@@ -1,17 +1,27 @@
 "use client";
 
 import { useParams } from "next/navigation";
+import { useMemo, useState } from "react";
 import { CartesianGrid, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 import useSWR from "swr";
+import { CandlestickChart } from "@/components/candlestick-chart";
 import { PageHeader } from "@/components/page-header";
 import { fetcher } from "@/lib/swr";
-import type { BacktestRun } from "@/types/agent";
+import type { BacktestRun, CandleBar } from "@/types/agent";
 
 export default function BacktestDetailPage() {
   const params = useParams<{ id: string }>();
   const { data: run } = useSWR<BacktestRun>(`/backtests/${params.id}`, fetcher, {
     refreshInterval: (data) => (data && (data.status === "pending" || data.status === "running") ? 2000 : 0),
   });
+  const { data: candleData } = useSWR<{ candles: Record<string, CandleBar[]> }>(
+    run ? `/backtests/${params.id}/candles` : null,
+    fetcher,
+  );
+
+  const pairs = useMemo(() => Object.keys(candleData?.candles ?? {}), [candleData]);
+  const [selectedPair, setSelectedPair] = useState<string>("");
+  const activePair = pairs.includes(selectedPair) ? selectedPair : pairs[0];
 
   if (!run) {
     return <div className="flex h-64 items-center justify-center text-sm text-muted-foreground">Loading...</div>;
@@ -68,6 +78,28 @@ export default function BacktestDetailPage() {
             <p className="text-sm text-muted-foreground">No equity data yet.</p>
           )}
         </div>
+
+        {pairs.length > 0 && (
+          <div className="rounded-lg border border-border bg-card p-4">
+            <div className="mb-4 flex items-center justify-between">
+              <h2 className="font-medium">Price chart</h2>
+              {pairs.length > 1 && (
+                <select
+                  value={activePair}
+                  onChange={(e) => setSelectedPair(e.target.value)}
+                  className="rounded-md border border-border bg-background px-2 py-1 text-sm"
+                >
+                  {pairs.map((pair) => (
+                    <option key={pair} value={pair}>
+                      {pair}
+                    </option>
+                  ))}
+                </select>
+              )}
+            </div>
+            <CandlestickChart candles={candleData?.candles?.[activePair] ?? []} />
+          </div>
+        )}
 
         <div className="rounded-lg border border-border bg-card">
           <div className="border-b border-border p-4">

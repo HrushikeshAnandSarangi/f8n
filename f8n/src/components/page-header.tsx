@@ -1,4 +1,5 @@
 import Container from "@/components/container";
+import { InfoTooltip } from "@/components/ui/info-tooltip";
 
 export function PageHeader({
   title,
@@ -11,9 +12,9 @@ export function PageHeader({
 }) {
   return (
     <Container className="flex flex-col gap-4 border-b border-border py-6 tablet:flex-row tablet:items-center tablet:justify-between">
-      <div>
+      <div className="flex items-center gap-2">
         <h1 className="text-2xl font-semibold tracking-tight">{title}</h1>
-        {description && <p className="mt-1 text-sm text-muted-foreground">{description}</p>}
+        {description && <InfoTooltip text={description} />}
       </div>
       {actions && <div className="flex shrink-0 items-center gap-2">{actions}</div>}
     </Container>

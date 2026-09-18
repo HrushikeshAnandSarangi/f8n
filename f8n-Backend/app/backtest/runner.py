@@ -39,7 +39,7 @@ def run_backtest(app, run_id):
 
 def _execute(run: BacktestRun):
     graph = run.strategy.graph_json
-    pairs = _exchange_symbol_pairs(graph)
+    pairs = exchange_symbol_pairs(graph)
     if not pairs:
         raise BacktestError("Strategy has no exchange price source blocks to backtest against")
 
@@ -68,7 +68,9 @@ def _execute(run: BacktestRun):
     run.summary_json = compute_summary(run.trades, run.equity_points, run.starting_capital)
 
 
-def _exchange_symbol_pairs(graph):
+def exchange_symbol_pairs(graph):
+    """Also used by GET /api/backtests/<id>/candles to know which OHLCV series
+    to read back out of the cache this same run populated."""
     pairs = set()
     for node in graph.get("nodes", []):
         if node.get("type") == "source.exchange_ticker":

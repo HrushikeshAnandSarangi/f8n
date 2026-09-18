@@ -91,6 +91,41 @@ export interface BacktestRun {
   finished_at: string | null;
   trades?: BacktestTrade[];
   equity_curve?: EquityPoint[];
+  /** Demo-mode only - the real API serves this from GET /backtests/:id/candles instead. */
+  candles?: Record<string, CandleBar[]>;
+}
+
+export interface CandleBar {
+  timestamp: string;
+  open: number;
+  high: number;
+  low: number;
+  close: number;
+  volume: number;
+}
+
+export interface LeaderboardBacktestSummary {
+  id: number;
+  total_return_pct: number;
+  sharpe_ratio: number;
+  max_drawdown_pct: number;
+  win_rate_pct: number;
+  trade_count: number;
+}
+
+export interface LeaderboardLiveSummary {
+  session_id: number;
+  equity: number;
+  pnl: number;
+  pnl_pct: number;
+}
+
+export interface LeaderboardRow {
+  strategy_id: number;
+  strategy_name: string;
+  backtests_run: number;
+  best_backtest: LeaderboardBacktestSummary;
+  live: LeaderboardLiveSummary | null;
 }
 
 export interface PaperTrade {

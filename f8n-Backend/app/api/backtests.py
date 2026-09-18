@@ -3,8 +3,9 @@ from datetime import datetime
 
 from flask import Blueprint, current_app, jsonify, request
 
-from app.backtest.runner import run_backtest
+from app.backtest.runner import exchange_symbol_pairs, run_backtest
 from app.extensions import db
+from app.marketdata.historical import get_cached_candles
 from app.models.backtest import BacktestRun
 
 from .strategies import get_strategy_or_404
@@ -45,3 +46,18 @@ def list_backtests():
 def get_backtest(run_id):
     run = BacktestRun.query.get_or_404(run_id)
     return jsonify(run.to_dict(include_details=True))
+
+
+@backtests_bp.get("/<int:run_id>/candles")
+def get_backtest_candles(run_id):
+    """OHLC bars for every exchange price source in the strategy, over the run's
+    date range - the same 1m timeframe _execute() cached them at. Charts the
+    price the strategy actually saw alongside its trades on the backtest page."""
+    run = BacktestRun.query.get_or_404(run_id)
+    pairs = exchange_symbol_pairs(run.strategy.graph_json)
+
+    candles = {
+        f"{exchange}:{symbol}": get_cached_candles(exchange, symbol, "1m", run.start_date, run.end_date)
+        for exchange, symbol in pairs
+    }
+    return jsonify({"candles": candles})

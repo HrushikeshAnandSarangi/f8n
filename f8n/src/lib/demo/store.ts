@@ -1,4 +1,4 @@
-import type { ActivityLogEntry, BacktestRun, BacktestTrade, EquityPoint, PaperSession, PaperTrade, Strategy, StrategyGraph } from "@/types/agent";
+import type { ActivityLogEntry, BacktestRun, BacktestTrade, CandleBar, EquityPoint, LeaderboardRow, PaperSession, PaperTrade, Strategy, StrategyGraph } from "@/types/agent";
 import { fakeSocket } from "./fake-socket";
 
 const STORAGE_KEY = "f8n_demo_store";
@@ -225,9 +225,57 @@ function completeBacktest(id: number) {
   run.equity_curve = equityCurve;
   run.trades = trades;
   run.summary = summarize(run.starting_capital, equityCurve, trades);
+  run.candles = generateSyntheticCandles(run.start_date, run.end_date, run.strategy_id);
   run.status = "done";
   run.finished_at = now();
   persist();
+}
+
+export function getBacktestCandles(id: number): Record<string, CandleBar[]> | undefined {
+  return getBacktest(id)?.candles;
+}
+
+/** Mirrors `exchange_symbol_pairs()` in f8n-Backend/app/backtest/runner.py - one
+ * OHLC series per exchange price source block in the strategy's graph, keyed the
+ * same way the real /backtests/:id/candles endpoint keys them. */
+function generateSyntheticCandles(startIso: string, endIso: string, strategyId: number): Record<string, CandleBar[]> {
+  const strategy = getStrategy(strategyId);
+  const pairs = new Set<string>();
+  for (const node of strategy?.graph?.nodes ?? []) {
+    if (node.type === "source.exchange_ticker") {
+      const exchange = node.config?.exchange as string | undefined;
+      const symbol = node.config?.symbol as string | undefined;
+      if (exchange && symbol) pairs.add(`${exchange}:${symbol}`);
+    }
+  }
+
+  const start = new Date(startIso).getTime();
+  const end = new Date(endIso).getTime();
+  const span = Math.max(end - start, 60_000);
+  const stepMs = span / BACKTEST_POINTS;
+
+  const result: Record<string, CandleBar[]> = {};
+  for (const pair of pairs) {
+    let price = 62000 + Math.random() * 8000;
+    const bars: CandleBar[] = [];
+    for (let i = 0; i <= BACKTEST_POINTS; i++) {
+      const open = price;
+      price = Math.max(1000, price * (1 + (Math.random() - 0.47) * 0.01));
+      const close = price;
+      const high = Math.max(open, close) * (1 + Math.random() * 0.003);
+      const low = Math.min(open, close) * (1 - Math.random() * 0.003);
+      bars.push({
+        timestamp: new Date(start + i * stepMs).toISOString(),
+        open: Number(open.toFixed(2)),
+        high: Number(high.toFixed(2)),
+        low: Number(low.toFixed(2)),
+        close: Number(close.toFixed(2)),
+        volume: Number((Math.random() * 5).toFixed(4)),
+      });
+    }
+    result[pair] = bars;
+  }
+  return result;
 }
 
 function generateSyntheticSeries(startIso: string, endIso: string, startingCapital: number) {
@@ -374,6 +422,60 @@ function stopPaperTicker(id: number) {
 
 export function stopAllTickers() {
   for (const id of paperTimers.keys()) stopPaperTicker(id);
+}
+
+// ---------------------------------------------------------------------------
+// Leaderboard
+// ---------------------------------------------------------------------------
+
+/** Mirrors GET /api/leaderboard in f8n-Backend/app/api/leaderboard.py: every
+ * strategy with at least one completed backtest, ranked by its best return. */
+export function getLeaderboard(): LeaderboardRow[] {
+  const store = ensureLoaded();
+  const rows: LeaderboardRow[] = [];
+
+  for (const strategy of store.strategies) {
+    const doneRuns = store.backtests.filter((b) => b.strategy_id === strategy.id && b.status === "done" && b.summary);
+    if (doneRuns.length === 0) continue;
+
+    const bestRun = doneRuns.reduce((best, run) =>
+      (run.summary!.total_return_pct > best.summary!.total_return_pct ? run : best),
+    );
+
+    const liveSession = [...store.paperSessions]
+      .filter((s) => s.strategy_id === strategy.id && s.status === "running")
+      .sort((a, b) => b.created_at.localeCompare(a.created_at))[0];
+
+    let live: LeaderboardRow["live"] = null;
+    if (liveSession) {
+      const points = liveSession.equity_curve ?? [];
+      const latestEquity = points.length ? points[points.length - 1].equity : liveSession.starting_capital;
+      const pnl = latestEquity - liveSession.starting_capital;
+      live = {
+        session_id: liveSession.id,
+        equity: latestEquity,
+        pnl,
+        pnl_pct: liveSession.starting_capital ? (pnl / liveSession.starting_capital) * 100 : 0,
+      };
+    }
+
+    rows.push({
+      strategy_id: strategy.id,
+      strategy_name: strategy.name,
+      backtests_run: doneRuns.length,
+      best_backtest: {
+        id: bestRun.id,
+        total_return_pct: bestRun.summary!.total_return_pct,
+        sharpe_ratio: bestRun.summary!.sharpe_ratio,
+        max_drawdown_pct: bestRun.summary!.max_drawdown_pct,
+        win_rate_pct: bestRun.summary!.win_rate_pct,
+        trade_count: bestRun.summary!.trade_count,
+      },
+      live,
+    });
+  }
+
+  return rows.sort((a, b) => b.best_backtest.total_return_pct - a.best_backtest.total_return_pct);
 }
 
 export function resetDemoData() {

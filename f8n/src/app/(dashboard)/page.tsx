@@ -8,6 +8,7 @@ import { useState } from "react";
 import useSWR from "swr";
 import Container from "@/components/container";
 import { Button } from "@/components/ui/button";
+import { InfoTooltip } from "@/components/ui/info-tooltip";
 import { api } from "@/lib/api";
 import { useDemoMode } from "@/lib/demo/mode";
 import { fetcher } from "@/lib/swr";
@@ -46,11 +47,9 @@ export default function DashboardPage() {
   return (
     <Container className="space-y-8 py-8">
       <div className="flex flex-col gap-4 tablet:flex-row tablet:items-center tablet:justify-between">
-        <div>
+        <div className="flex items-center gap-2">
           <h1 className="text-2xl font-semibold tracking-tight">Overview</h1>
-          <p className="mt-1 text-sm text-muted-foreground">
-            Build agents from blocks, backtest them against real market data, then paper-trade them live.
-          </p>
+          <InfoTooltip text="Build agents from blocks, backtest them against real market data, then paper-trade them live." />
         </div>
         <Button onClick={createAgent} disabled={creating}>
           <Plus className="mr-2 h-4 w-4" />
@@ -99,9 +98,27 @@ export default function DashboardPage() {
       </div>
 
       <div className="grid grid-cols-1 gap-4 tablet:grid-cols-3">
-        <StatCard icon={Workflow} label="Agents" value={strategies?.length ?? "-"} href="/strategies" />
-        <StatCard icon={History} label="Backtests" value={backtests?.length ?? "-"} href="/backtest" />
-        <StatCard icon={Activity} label="Live Paper Sessions" value={activeSessions.length} href="/paper-trading" />
+        <StatCard
+          icon={Workflow}
+          label="Agents"
+          value={strategies?.length ?? "-"}
+          href="/strategies"
+          help="A graph of blocks you assemble on the canvas - the same graph is used to backtest and to paper-trade."
+        />
+        <StatCard
+          icon={History}
+          label="Backtests"
+          value={backtests?.length ?? "-"}
+          href="/backtest"
+          help="A replay of an agent's graph against real historical market data, before risking any (paper) money on it."
+        />
+        <StatCard
+          icon={Activity}
+          label="Live Paper Sessions"
+          value={activeSessions.length}
+          href="/paper-trading"
+          help="An agent running live right now - PAPER / TESTNET only, no real funds are ever used."
+        />
       </div>
 
       <div className="rounded-lg border border-border bg-card">
@@ -144,11 +161,13 @@ function StatCard({
   label,
   value,
   href,
+  help,
 }: {
   icon: React.ElementType;
   label: string;
   value: React.ReactNode;
   href: string;
+  help: string;
 }) {
   return (
     <Link
@@ -156,7 +175,10 @@ function StatCard({
       className="flex items-center justify-between rounded-lg border border-border bg-card p-6 hover:bg-accent"
     >
       <div>
-        <p className="text-sm text-muted-foreground">{label}</p>
+        <div className="flex items-center gap-1.5">
+          <p className="text-sm text-muted-foreground">{label}</p>
+          <InfoTooltip text={help} />
+        </div>
         <p className="text-2xl font-semibold">{value}</p>
       </div>
       <Icon className="h-8 w-8 text-muted-foreground" />

@@ -27,6 +27,7 @@ def create_app(config_name=None):
 
     from .api.backtests import backtests_bp
     from .api.blocks import blocks_bp
+    from .api.leaderboard import leaderboard_bp
     from .api.paper_sessions import paper_sessions_bp
     from .api.strategies import strategies_bp
 
@@ -34,6 +35,7 @@ def create_app(config_name=None):
     app.register_blueprint(strategies_bp, url_prefix="/api/strategies")
     app.register_blueprint(backtests_bp, url_prefix="/api/backtests")
     app.register_blueprint(paper_sessions_bp, url_prefix="/api/paper-sessions")
+    app.register_blueprint(leaderboard_bp, url_prefix="/api/leaderboard")
 
     from . import sockets  # noqa: F401  registers Socket.IO event handlers
 

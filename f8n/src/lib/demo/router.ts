@@ -1,3 +1,4 @@
+import type { CandleBar } from "@/types/agent";
 import { DEMO_BLOCKS } from "./blocks";
 import * as store from "./store";
 
@@ -37,6 +38,10 @@ export function handleDemoRequest(method: string, path: string, body: unknown): 
 
   if (segments[0] === "paper-sessions") {
     return handlePaperSessions(method, segments, body);
+  }
+
+  if (segments[0] === "leaderboard" && method === "get") {
+    return { status: 200, data: store.getLeaderboard() };
   }
 
   throw new DemoApiError(404, { error: `No demo route for ${method.toUpperCase()} ${url}` });
@@ -86,6 +91,9 @@ function handleBacktests(method: string, segments: string[], body: unknown): Dem
       if (!store.getStrategy(input.strategy_id)) throw new DemoApiError(404, { error: "Not found" });
       return { status: 202, data: store.createBacktest(input) };
     }
+  } else if (segments[2] === "candles" && method === "get") {
+    const candles: Record<string, CandleBar[]> = store.getBacktestCandles(id) ?? {};
+    return { status: 200, data: { candles } };
   } else if (method === "get") {
     const run = store.getBacktest(id);
     if (!run) throw new DemoApiError(404, { error: "Not found" });

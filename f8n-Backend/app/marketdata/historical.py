@@ -76,3 +76,31 @@ def get_ohlcv_frame(exchange, symbol, timeframe, start, end) -> pd.Series:
     if not rows:
         return pd.Series(dtype=float)
     return pd.Series([r.close for r in rows], index=[r.timestamp for r in rows])
+
+
+def get_cached_candles(exchange, symbol, timeframe, start, end):
+    """Reads back the OHLC bars a backtest run already cached for its own window -
+    used by GET /api/backtests/<id>/candles to chart price without re-hitting the
+    exchange. Returns [] if the run hasn't populated the cache yet (still pending)."""
+    rows = (
+        OHLCVCache.query.filter(
+            OHLCVCache.exchange == exchange,
+            OHLCVCache.symbol == symbol,
+            OHLCVCache.timeframe == timeframe,
+            OHLCVCache.timestamp >= start,
+            OHLCVCache.timestamp <= end,
+        )
+        .order_by(OHLCVCache.timestamp)
+        .all()
+    )
+    return [
+        {
+            "timestamp": r.timestamp.isoformat(),
+            "open": r.open,
+            "high": r.high,
+            "low": r.low,
+            "close": r.close,
+            "volume": r.volume,
+        }
+        for r in rows
+    ]
